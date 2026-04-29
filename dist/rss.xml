@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>(주)이케이메디컬 | 의료기기 판매·유통·공급 파트너</title>
+    <link>https://ekmedicalkorea.com</link>
+    <description>EK 메디칼은 로컬 피부과·정형외과 원장님의 의료기기 파트너입니다. 기기 선정 컨설팅부터 납품 후 12개월 전담 관리까지 제공합니다.</description>
+    <language>ko</language>
+    <lastBuildDate>Tue, 22 Apr 2026 00:00:00 +0900</lastBuildDate>
+    <atom:link href="https://ekmedicalkorea.com/rss.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>EK 메디칼 홈페이지 오픈</title>
+      <link>https://ekmedicalkorea.com</link>
+      <description>피부과·정형외과 원장님을 위한 의료기기 파트너 EK 메디칼 홈페이지가 오픈했습니다.</description>
+      <pubDate>Tue, 22 Apr 2026 00:00:00 +0900</pubDate>
+      <guid>https://ekmedicalkorea.com</guid>
+    </item>
+  </channel>
+</rss>
