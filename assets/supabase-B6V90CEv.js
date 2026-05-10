@@ -1,0 +1,1 @@
+import{t as e}from"./vendor-supabase-BopYEOLj.js";var t=e(`https://zhjgsryutquaejflvaqq.supabase.co`,`eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpoamdzcnl1dHF1YWVqZmx2YXFxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0MDYzMjYsImV4cCI6MjA5Mjk4MjMyNn0.SKY9E1slUPLaivO634qr8QsxtzyNLzdQIJU9Evz3WTE`);export{t};
