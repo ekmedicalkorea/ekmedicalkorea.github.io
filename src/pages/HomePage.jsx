@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom'
-import { products, categoryLabel } from '../data/products'
 import { useCart } from '../context/CartContext'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { supabase } from '../lib/supabase'
 
+const CAT_LABEL = { consumables: '의료소모품', devices: '의료기기', cosmetics: '화장품' }
 const categories = [
   { key: 'consumables', label: '의료소모품', icon: '💉', desc: '주사기, 장갑, 드레싱 등' },
   { key: 'devices', label: '의료기기', icon: '🏥', desc: '레이저, 충격파, 진단기 등' },
@@ -12,7 +13,12 @@ const categories = [
 export default function HomePage() {
   const { addItem } = useCart()
   const [addedId, setAddedId] = useState(null)
-  const bestProducts = products.slice(0, 6)
+  const [bestProducts, setBestProducts] = useState([])
+
+  useEffect(() => {
+    supabase.from('products').select('*').eq('is_active', true).order('created_at', { ascending: true }).limit(6)
+      .then(({ data }) => setBestProducts(data || []))
+  }, [])
 
   function handleAdd(product) {
     addItem(product, 1)
@@ -31,12 +37,8 @@ export default function HomePage() {
               의료기기·소모품·화장품<br />한 곳에서 편리하게 주문하세요
             </h1>
             <div className="flex gap-3 flex-wrap">
-              <Link to="/products" className="bg-white text-[#1251A3] font-semibold px-6 py-2.5 rounded-lg hover:bg-blue-50 transition-colors">
-                전체 제품 보기
-              </Link>
-              <Link to="/order" className="border border-white/40 text-white font-medium px-6 py-2.5 rounded-lg hover:bg-white/10 transition-colors">
-                주문 문의하기
-              </Link>
+              <Link to="/products" className="bg-white text-[#1251A3] font-semibold px-6 py-2.5 rounded-lg hover:bg-blue-50 transition-colors">전체 제품 보기</Link>
+              <Link to="/order" className="border border-white/40 text-white font-medium px-6 py-2.5 rounded-lg hover:bg-white/10 transition-colors">주문 문의하기</Link>
             </div>
           </div>
           <div className="hidden md:flex gap-4">
@@ -72,42 +74,52 @@ export default function HomePage() {
           <Link to="/products" className="text-sm text-[#1251A3] hover:underline">더보기 →</Link>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-          {bestProducts.map(product => (
-            <div key={product.id} className="card p-4 flex flex-col">
-              <div className="w-full aspect-square rounded-lg bg-gray-50 flex items-center justify-center mb-3 text-gray-300">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                </svg>
-              </div>
-              <span className="text-[10px] font-semibold text-[#1251A3] bg-blue-50 px-1.5 py-0.5 rounded self-start mb-1.5">
-                {categoryLabel[product.category]}
-              </span>
-              <p className="text-sm font-medium text-gray-800 mb-1 line-clamp-2 flex-1">{product.name}</p>
-              <p className="text-sm font-bold text-[#1251A3] mb-2">{product.price.toLocaleString()}원</p>
-              <button
-                onClick={() => handleAdd(product)}
-                className={`w-full text-xs py-1.5 rounded-lg font-medium transition-all ${addedId === product.id ? 'bg-green-100 text-green-600' : 'bg-[#1251A3] text-white hover:bg-[#0e3f82]'}`}
-              >
-                {addedId === product.id ? '✓ 담김' : '장바구니'}
-              </button>
-            </div>
-          ))}
+          {bestProducts.length === 0
+            ? [...Array(6)].map((_, i) => (
+                <div key={i} className="card p-4 animate-pulse">
+                  <div className="w-full aspect-square rounded-lg bg-gray-100 mb-3" />
+                  <div className="h-3 bg-gray-100 rounded mb-2 w-1/2" />
+                  <div className="h-4 bg-gray-100 rounded mb-1" />
+                  <div className="h-6 bg-gray-100 rounded mt-2" />
+                </div>
+              ))
+            : bestProducts.map(product => (
+                <div key={product.id} className="card p-4 flex flex-col">
+                  <div className="w-full aspect-square rounded-lg bg-gray-50 flex items-center justify-center mb-3 overflow-hidden">
+                    {product.image_url ? (
+                      <img src={product.image_url} alt={product.name} className="w-full h-full object-cover" />
+                    ) : (
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                      </svg>
+                    )}
+                  </div>
+                  <span className="text-[10px] font-semibold text-[#1251A3] bg-blue-50 px-1.5 py-0.5 rounded self-start mb-1.5">
+                    {CAT_LABEL[product.category] || product.category}
+                  </span>
+                  <p className="text-sm font-medium text-gray-800 mb-1 line-clamp-2 flex-1">{product.name}</p>
+                  <p className="text-sm font-bold text-[#1251A3] mb-2">{Number(product.price).toLocaleString()}원</p>
+                  <button onClick={() => handleAdd(product)}
+                    className={`w-full text-xs py-1.5 rounded-lg font-medium transition-all ${addedId === product.id ? 'bg-green-100 text-green-600' : 'bg-[#1251A3] text-white hover:bg-[#0e3f82]'}`}>
+                    {addedId === product.id ? '✓ 담김' : '장바구니'}
+                  </button>
+                </div>
+              ))
+          }
         </div>
       </section>
 
-      {/* 안내 배너 */}
+      {/* 하단 특징 */}
       <section className="bg-white border-t border-b border-gray-200 py-8 px-6 lg:px-12">
         <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-          {[
-            { icon: '🚚', title: '빠른 배송', desc: '서울 당일 · 전국 익일' },
+          {[{ icon: '🚚', title: '빠른 배송', desc: '서울 당일 · 전국 익일' },
             { icon: '🔧', title: '전담 AS', desc: '4시간 이내 응대' },
             { icon: '📋', title: '견적서 제공', desc: '맞춤형 ROI 분석' },
-            { icon: '✅', title: '정품 보증', desc: '100% 공식 정품만 공급' },
-          ].map((item, i) => (
+            { icon: '✅', title: '정품 보증', desc: '100% 공식 정품만 공급' }].map((f, i) => (
             <div key={i}>
-              <div className="text-3xl mb-2">{item.icon}</div>
-              <p className="font-semibold text-gray-800 text-sm">{item.title}</p>
-              <p className="text-gray-400 text-xs mt-0.5">{item.desc}</p>
+              <div className="text-3xl mb-2">{f.icon}</div>
+              <p className="font-semibold text-gray-800 text-sm">{f.title}</p>
+              <p className="text-gray-400 text-xs mt-0.5">{f.desc}</p>
             </div>
           ))}
         </div>
