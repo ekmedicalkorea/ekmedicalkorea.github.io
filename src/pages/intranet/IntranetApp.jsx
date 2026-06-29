@@ -14,6 +14,11 @@ import SalesStatus from './order/SalesStatus'
 import Inventory from './order/Inventory'
 import PurchaseOrders from './order/PurchaseOrders'
 import Delivery from './order/Delivery'
+import WebOrders from './website/WebOrders'
+import WebPartners from './website/WebPartners'
+import WebProducts from './website/WebProducts'
+import WebNotices from './website/WebNotices'
+import WebClaims from './website/WebClaims'
 
 function ProtectedRoute({ children }) {
   const { intranetUser, loading } = useIntranetAuth()
@@ -40,6 +45,11 @@ function IntranetRoutes() {
         <Route path="inventory" element={<Inventory />} />
         <Route path="purchase-orders" element={<PurchaseOrders />} />
         <Route path="delivery" element={<Delivery />} />
+        <Route path="web/orders" element={<WebOrders />} />
+        <Route path="web/partners" element={<WebPartners />} />
+        <Route path="web/products" element={<WebProducts />} />
+        <Route path="web/notices" element={<WebNotices />} />
+        <Route path="web/claims" element={<WebClaims />} />
         <Route path="*" element={<Navigate to="/intranet/dashboard" replace />} />
       </Route>
     </Routes>
