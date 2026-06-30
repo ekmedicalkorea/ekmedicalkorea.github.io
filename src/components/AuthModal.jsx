@@ -31,8 +31,8 @@ export default function AuthModal({ onClose }) {
         setError('가입 완료! 이제 로그인하세요.')
         setMode('login')
       } else {
-        onClose()
         navigate('/')
+        onClose()
       }
     }
   }
