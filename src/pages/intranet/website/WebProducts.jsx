@@ -1,9 +1,17 @@
 import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../../../lib/supabase'
-import { Search, Plus, Pencil, X, Upload, Loader } from 'lucide-react'
+import { Search, Plus, Pencil, X, Upload, Loader, Image as ImageIcon } from 'lucide-react'
 
 const CAT = { consumables:'의료소모품', devices:'의료기기', cosmetics:'화장품', injectables:'주사제' }
-const EMPTY_FORM = { name:'', category:'consumables', subcategory:'', price:'', unit:'', manufacturer:'', description:'', is_active:true, image_url:'' }
+
+const EMPTY_INFO = { purpose:'', usage:'', precautions:'', warranty:'', importer:'', country:'', consumer_support:'' }
+const EMPTY_FORM = {
+  name:'', category:'consumables', subcategory:'', price:'', unit:'',
+  manufacturer:'', description:'', is_active:true, image_url:'',
+  spec:'', origin:'', product_code:'', shipping_fee:'',
+  detail_content:'', detail_images:[],
+  product_info: { ...EMPTY_INFO }
+}
 
 export default function WebProducts() {
   const [products, setProducts]   = useState([])
@@ -13,17 +21,20 @@ export default function WebProducts() {
   const [stockEdits, setStockEdits] = useState({})
 
   // 모달
-  const [modal, setModal]     = useState(null)   // null | 'new' | 'edit'
-  const [form, setForm]       = useState(EMPTY_FORM)
-  const [saving, setSaving]   = useState(false)
-  const [imgUploading, setImgUploading] = useState(false)
-  const [imgPreview, setImgPreview] = useState('')
-  const fileRef = useRef(null)
+  const [modal, setModal]         = useState(null)   // null | 'new' | { type:'edit', id }
+  const [form, setForm]           = useState(EMPTY_FORM)
+  const [activeTab, setActiveTab] = useState('basic') // 'basic' | 'detail' | 'info' | 'images'
+  const [saving, setSaving]       = useState(false)
+  const [imgUploading, setImgUploading]         = useState(false)
+  const [detailImgUploading, setDetailImgUploading] = useState(false)
+  const [imgPreview, setImgPreview]             = useState('')
+  const mainImgRef   = useRef(null)
+  const detailImgRef = useRef(null)
 
   async function load() {
     setLoading(true)
     const { data } = await supabase.from('products')
-      .select('id,name,category,subcategory,price,unit,stock,is_active,manufacturer,description,image_url')
+      .select('id,name,category,subcategory,price,unit,stock,is_active,manufacturer,description,image_url,spec,origin,product_code,shipping_fee,detail_content,detail_images,product_info')
       .order('name')
     setProducts(data || [])
     setLoading(false)
@@ -44,8 +55,9 @@ export default function WebProducts() {
 
   /* ── 모달 열기 ── */
   function openNew() {
-    setForm(EMPTY_FORM)
+    setForm({ ...EMPTY_FORM, product_info: { ...EMPTY_INFO }, detail_images: [] })
     setImgPreview('')
+    setActiveTab('basic')
     setModal('new')
   }
   function openEdit(p) {
@@ -54,13 +66,22 @@ export default function WebProducts() {
       subcategory: p.subcategory||'', price: p.price||'',
       unit: p.unit||'', manufacturer: p.manufacturer||'',
       description: p.description||'', is_active: p.is_active,
-      image_url: p.image_url||''
+      image_url: p.image_url||'',
+      spec: p.spec||'', origin: p.origin||'',
+      product_code: p.product_code||'', shipping_fee: p.shipping_fee||'',
+      detail_content: p.detail_content||'',
+      detail_images: Array.isArray(p.detail_images) ? p.detail_images : [],
+      product_info: {
+        ...EMPTY_INFO,
+        ...(p.product_info || {})
+      }
     })
     setImgPreview(p.image_url||'')
+    setActiveTab('basic')
     setModal({ type:'edit', id: p.id })
   }
 
-  /* ── 이미지 업로드 ── */
+  /* ── 대표 이미지 업로드 ── */
   async function handleImgUpload(e) {
     const file = e.target.files?.[0]
     if (!file) return
@@ -74,6 +95,29 @@ export default function WebProducts() {
       setImgPreview(publicUrl)
     }
     setImgUploading(false)
+  }
+
+  /* ── 상세 이미지 업로드 ── */
+  async function handleDetailImgUpload(e) {
+    const files = Array.from(e.target.files || [])
+    if (!files.length) return
+    setDetailImgUploading(true)
+    const urls = []
+    for (const file of files) {
+      const ext = file.name.split('.').pop()
+      const path = `detail/${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`
+      const { error } = await supabase.storage.from('product-images').upload(path, file, { upsert: true })
+      if (!error) {
+        const { data: { publicUrl } } = supabase.storage.from('product-images').getPublicUrl(path)
+        urls.push(publicUrl)
+      }
+    }
+    setForm(f => ({ ...f, detail_images: [...(f.detail_images || []), ...urls] }))
+    setDetailImgUploading(false)
+  }
+
+  function removeDetailImg(idx) {
+    setForm(f => ({ ...f, detail_images: f.detail_images.filter((_, i) => i !== idx) }))
   }
 
   /* ── 저장 ── */
@@ -90,6 +134,13 @@ export default function WebProducts() {
       description: form.description.trim() || null,
       is_active: form.is_active,
       image_url: form.image_url || null,
+      spec: form.spec.trim() || null,
+      origin: form.origin.trim() || null,
+      product_code: form.product_code.trim() || null,
+      shipping_fee: form.shipping_fee.trim() || null,
+      detail_content: form.detail_content.trim() || null,
+      detail_images: form.detail_images.length ? form.detail_images : [],
+      product_info: form.product_info,
     }
     if (modal === 'new') {
       const { error } = await supabase.from('products').insert(payload)
@@ -112,6 +163,17 @@ export default function WebProducts() {
     const matchSearch = !q || p.name?.toLowerCase().includes(q) || p.manufacturer?.toLowerCase().includes(q)
     return matchCat && matchSearch
   })
+
+  const TABS = [
+    { key:'basic',  label:'기본 정보' },
+    { key:'detail', label:'상세 내용' },
+    { key:'info',   label:'제품 정보' },
+    { key:'images', label:'상세 이미지' },
+  ]
+
+  function setInfo(field, val) {
+    setForm(f => ({ ...f, product_info: { ...f.product_info, [field]: val } }))
+  }
 
   return (
     <div>
@@ -201,102 +263,227 @@ export default function WebProducts() {
       {/* ── 수정/등록 모달 ── */}
       {modal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40">
-          <div className="bg-white rounded-xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl">
-            <div className="flex items-center justify-between px-5 py-4 border-b">
+          <div className="bg-white rounded-xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl">
+
+            {/* 헤더 */}
+            <div className="flex items-center justify-between px-5 py-4 border-b flex-shrink-0">
               <h2 className="font-semibold text-gray-800">{modal === 'new' ? '신규 제품 등록' : '제품 수정'}</h2>
               <button onClick={() => setModal(null)} className="text-gray-400 hover:text-gray-600"><X size={18} /></button>
             </div>
 
-            <div className="p-5 space-y-4">
-              {/* 이미지 */}
-              <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1.5">제품 이미지</label>
-                <div className="flex items-center gap-3">
-                  {imgPreview
-                    ? <img src={imgPreview} className="w-20 h-20 object-cover rounded-lg border border-gray-200" />
-                    : <div className="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center"><Upload size={20} className="text-gray-300" /></div>
-                  }
-                  <div>
-                    <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleImgUpload} />
-                    <button onClick={() => fileRef.current?.click()}
-                      disabled={imgUploading}
-                      className="flex items-center gap-1.5 text-xs border border-gray-200 px-3 py-2 rounded hover:bg-gray-50 text-gray-600">
-                      {imgUploading ? <><Loader size={12} className="animate-spin" /> 업로드 중...</> : <><Upload size={12} /> 이미지 선택</>}
-                    </button>
-                    {imgPreview && (
-                      <button onClick={() => { setImgPreview(''); setForm(f => ({...f, image_url:''})) }}
-                        className="mt-1 text-xs text-red-400 hover:text-red-600 block">이미지 제거</button>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              {/* 제품명 */}
-              <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">제품명 *</label>
-                <input value={form.name} onChange={e => setForm(f=>({...f,name:e.target.value}))}
-                  className="w-full border border-gray-200 rounded px-3 py-2 text-sm focus:outline-none focus:border-[#1976d2]" placeholder="제품명 입력" />
-              </div>
-
-              {/* 카테고리 + 하위카테고리 */}
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs font-medium text-gray-500 mb-1">카테고리</label>
-                  <select value={form.category} onChange={e => setForm(f=>({...f,category:e.target.value}))}
-                    className="w-full border border-gray-200 rounded px-3 py-2 text-sm focus:outline-none focus:border-[#1976d2]">
-                    {Object.entries(CAT).map(([k,v]) => <option key={k} value={k}>{v}</option>)}
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-gray-500 mb-1">하위 카테고리</label>
-                  <input value={form.subcategory} onChange={e => setForm(f=>({...f,subcategory:e.target.value}))}
-                    className="w-full border border-gray-200 rounded px-3 py-2 text-sm focus:outline-none focus:border-[#1976d2]" placeholder="예: 주사침, 장갑" />
-                </div>
-              </div>
-
-              {/* 가격 + 단위 */}
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs font-medium text-gray-500 mb-1">가격 (원)</label>
-                  <input type="number" value={form.price} onChange={e => setForm(f=>({...f,price:e.target.value}))}
-                    className="w-full border border-gray-200 rounded px-3 py-2 text-sm focus:outline-none focus:border-[#1976d2]" placeholder="0" />
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-gray-500 mb-1">단위</label>
-                  <input value={form.unit} onChange={e => setForm(f=>({...f,unit:e.target.value}))}
-                    className="w-full border border-gray-200 rounded px-3 py-2 text-sm focus:outline-none focus:border-[#1976d2]" placeholder="예: 100EA/CASE" />
-                </div>
-              </div>
-
-              {/* 제조사 */}
-              <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">제조사</label>
-                <input value={form.manufacturer} onChange={e => setForm(f=>({...f,manufacturer:e.target.value}))}
-                  className="w-full border border-gray-200 rounded px-3 py-2 text-sm focus:outline-none focus:border-[#1976d2]" placeholder="제조사명" />
-              </div>
-
-              {/* 설명 */}
-              <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">제품 설명</label>
-                <textarea value={form.description} onChange={e => setForm(f=>({...f,description:e.target.value}))}
-                  rows={3} className="w-full border border-gray-200 rounded px-3 py-2 text-sm focus:outline-none focus:border-[#1976d2] resize-none" placeholder="제품 설명 입력" />
-              </div>
-
-              {/* 판매 상태 */}
-              <div className="flex items-center gap-2">
-                <input type="checkbox" id="is_active" checked={form.is_active} onChange={e => setForm(f=>({...f,is_active:e.target.checked}))}
-                  className="w-4 h-4 accent-[#1976d2]" />
-                <label htmlFor="is_active" className="text-sm text-gray-700">홈페이지에 판매중으로 표시</label>
-              </div>
+            {/* 탭 */}
+            <div className="flex border-b flex-shrink-0">
+              {TABS.map(t => (
+                <button key={t.key} onClick={() => setActiveTab(t.key)}
+                  className={`px-4 py-2.5 text-xs font-medium border-b-2 transition-colors ${
+                    activeTab===t.key ? 'border-[#1976d2] text-[#1976d2]' : 'border-transparent text-gray-500 hover:text-gray-700'
+                  }`}>
+                  {t.label}
+                </button>
+              ))}
             </div>
 
-            <div className="px-5 py-4 border-t flex gap-2 justify-end">
-              <button onClick={() => setModal(null)}
-                className="px-4 py-2 text-sm border border-gray-200 rounded text-gray-500 hover:bg-gray-50">취소</button>
-              <button onClick={handleSave} disabled={saving}
-                className="px-4 py-2 text-sm bg-[#1976d2] text-white rounded hover:bg-[#1565c0] disabled:opacity-50 font-medium">
-                {saving ? '저장 중...' : '저장'}
-              </button>
+            {/* 본문 */}
+            <div className="flex-1 overflow-y-auto p-5">
+
+              {/* ── 기본 정보 탭 ── */}
+              {activeTab === 'basic' && (
+                <div className="space-y-4">
+                  {/* 대표 이미지 */}
+                  <div>
+                    <label className="block text-xs font-medium text-gray-500 mb-1.5">대표 이미지</label>
+                    <div className="flex items-center gap-3">
+                      {imgPreview
+                        ? <img src={imgPreview} className="w-20 h-20 object-cover rounded-lg border border-gray-200" />
+                        : <div className="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center"><Upload size={20} className="text-gray-300" /></div>
+                      }
+                      <div>
+                        <input ref={mainImgRef} type="file" accept="image/*" className="hidden" onChange={handleImgUpload} />
+                        <button onClick={() => mainImgRef.current?.click()} disabled={imgUploading}
+                          className="flex items-center gap-1.5 text-xs border border-gray-200 px-3 py-2 rounded hover:bg-gray-50 text-gray-600">
+                          {imgUploading ? <><Loader size={12} className="animate-spin" /> 업로드 중...</> : <><Upload size={12} /> 이미지 선택</>}
+                        </button>
+                        {imgPreview && (
+                          <button onClick={() => { setImgPreview(''); setForm(f => ({...f, image_url:''})) }}
+                            className="mt-1 text-xs text-red-400 hover:text-red-600 block">이미지 제거</button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 제품명 */}
+                  <div>
+                    <label className="block text-xs font-medium text-gray-500 mb-1">제품명 *</label>
+                    <input value={form.name} onChange={e => setForm(f=>({...f,name:e.target.value}))}
+                      className="w-full border border-gray-200 rounded px-3 py-2 text-sm focus:outline-none focus:border-[#1976d2]" placeholder="제품명 입력" />
+                  </div>
+
+                  {/* 카테고리 + 하위카테고리 */}
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-medium text-gray-500 mb-1">카테고리</label>
+                      <select value={form.category} onChange={e => setForm(f=>({...f,category:e.target.value}))}
+                        className="w-full border border-gray-200 rounded px-3 py-2 text-sm focus:outline-none focus:border-[#1976d2]">
+                        {Object.entries(CAT).map(([k,v]) => <option key={k} value={k}>{v}</option>)}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-500 mb-1">하위 카테고리</label>
+                      <input value={form.subcategory} onChange={e => setForm(f=>({...f,subcategory:e.target.value}))}
+                        className="w-full border border-gray-200 rounded px-3 py-2 text-sm focus:outline-none focus:border-[#1976d2]" placeholder="예: 주사침, 장갑" />
+                    </div>
+                  </div>
+
+                  {/* 가격 + 단위 */}
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-medium text-gray-500 mb-1">가격 (원)</label>
+                      <input type="number" value={form.price} onChange={e => setForm(f=>({...f,price:e.target.value}))}
+                        className="w-full border border-gray-200 rounded px-3 py-2 text-sm focus:outline-none focus:border-[#1976d2]" placeholder="0" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-500 mb-1">단위</label>
+                      <input value={form.unit} onChange={e => setForm(f=>({...f,unit:e.target.value}))}
+                        className="w-full border border-gray-200 rounded px-3 py-2 text-sm focus:outline-none focus:border-[#1976d2]" placeholder="예: 100EA/CASE" />
+                    </div>
+                  </div>
+
+                  {/* 제조사 + 규격 */}
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-medium text-gray-500 mb-1">제조사</label>
+                      <input value={form.manufacturer} onChange={e => setForm(f=>({...f,manufacturer:e.target.value}))}
+                        className="w-full border border-gray-200 rounded px-3 py-2 text-sm focus:outline-none focus:border-[#1976d2]" placeholder="제조사명" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-500 mb-1">규격/스펙</label>
+                      <input value={form.spec} onChange={e => setForm(f=>({...f,spec:e.target.value}))}
+                        className="w-full border border-gray-200 rounded px-3 py-2 text-sm focus:outline-none focus:border-[#1976d2]" placeholder="예: 250*200*40mm" />
+                    </div>
+                  </div>
+
+                  {/* 원산지 + 제품코드 */}
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-medium text-gray-500 mb-1">원산지</label>
+                      <input value={form.origin} onChange={e => setForm(f=>({...f,origin:e.target.value}))}
+                        className="w-full border border-gray-200 rounded px-3 py-2 text-sm focus:outline-none focus:border-[#1976d2]" placeholder="예: 대한민국" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-500 mb-1">제품코드</label>
+                      <input value={form.product_code} onChange={e => setForm(f=>({...f,product_code:e.target.value}))}
+                        className="w-full border border-gray-200 rounded px-3 py-2 text-sm focus:outline-none focus:border-[#1976d2]" placeholder="제품코드" />
+                    </div>
+                  </div>
+
+                  {/* 배송비 */}
+                  <div>
+                    <label className="block text-xs font-medium text-gray-500 mb-1">배송비</label>
+                    <input value={form.shipping_fee} onChange={e => setForm(f=>({...f,shipping_fee:e.target.value}))}
+                      className="w-full border border-gray-200 rounded px-3 py-2 text-sm focus:outline-none focus:border-[#1976d2]" placeholder="예: 5000원 (5만원 이상 무료배송)" />
+                  </div>
+
+                  {/* 간략 설명 */}
+                  <div>
+                    <label className="block text-xs font-medium text-gray-500 mb-1">간략 설명</label>
+                    <textarea value={form.description} onChange={e => setForm(f=>({...f,description:e.target.value}))}
+                      rows={2} className="w-full border border-gray-200 rounded px-3 py-2 text-sm focus:outline-none focus:border-[#1976d2] resize-none" placeholder="제품 한 줄 설명" />
+                  </div>
+
+                  {/* 판매 상태 */}
+                  <div className="flex items-center gap-2">
+                    <input type="checkbox" id="is_active" checked={form.is_active} onChange={e => setForm(f=>({...f,is_active:e.target.checked}))}
+                      className="w-4 h-4 accent-[#1976d2]" />
+                    <label htmlFor="is_active" className="text-sm text-gray-700">홈페이지에 판매중으로 표시</label>
+                  </div>
+                </div>
+              )}
+
+              {/* ── 상세 내용 탭 ── */}
+              {activeTab === 'detail' && (
+                <div>
+                  <label className="block text-xs font-medium text-gray-500 mb-2">상세 내용</label>
+                  <textarea value={form.detail_content} onChange={e => setForm(f=>({...f,detail_content:e.target.value}))}
+                    rows={18} className="w-full border border-gray-200 rounded px-3 py-2 text-sm focus:outline-none focus:border-[#1976d2] resize-none font-mono" placeholder="상세 페이지에 표시될 내용을 입력하세요." />
+                  <p className="text-[11px] text-gray-400 mt-1">{form.detail_content.length}자</p>
+                </div>
+              )}
+
+              {/* ── 제품 정보 탭 ── */}
+              {activeTab === 'info' && (
+                <div className="space-y-3">
+                  {[
+                    ['purpose',          '용도/사용목적'],
+                    ['usage',            '사용방법'],
+                    ['precautions',      '사용 시 주의사항'],
+                    ['warranty',         '품질보증기준'],
+                    ['importer',         '수입업자'],
+                    ['country',          '제조국'],
+                    ['consumer_support', '소비자상담실'],
+                  ].map(([field, label]) => (
+                    <div key={field}>
+                      <label className="block text-xs font-medium text-gray-500 mb-1">{label}</label>
+                      <textarea value={form.product_info[field]||''} onChange={e => setInfo(field, e.target.value)}
+                        rows={2} className="w-full border border-gray-200 rounded px-3 py-2 text-sm focus:outline-none focus:border-[#1976d2] resize-none" />
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* ── 상세 이미지 탭 ── */}
+              {activeTab === 'images' && (
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <label className="text-xs font-medium text-gray-500">상세 이미지 ({form.detail_images.length}장)</label>
+                    <div>
+                      <input ref={detailImgRef} type="file" accept="image/*" multiple className="hidden" onChange={handleDetailImgUpload} />
+                      <button onClick={() => detailImgRef.current?.click()} disabled={detailImgUploading}
+                        className="flex items-center gap-1.5 text-xs bg-[#1976d2] text-white px-3 py-1.5 rounded hover:bg-[#1565c0] disabled:opacity-50">
+                        {detailImgUploading ? <><Loader size={12} className="animate-spin" /> 업로드 중...</> : <><ImageIcon size={12} /> 이미지 추가</>}
+                      </button>
+                    </div>
+                  </div>
+
+                  {form.detail_images.length === 0
+                    ? (
+                      <div className="border-2 border-dashed border-gray-200 rounded-lg py-12 text-center">
+                        <ImageIcon size={32} className="text-gray-200 mx-auto mb-2" />
+                        <p className="text-xs text-gray-400">상세 이미지를 추가하세요</p>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-3 gap-3">
+                        {form.detail_images.map((url, idx) => (
+                          <div key={idx} className="relative group">
+                            <img src={url} className="w-full aspect-square object-cover rounded-lg border border-gray-200" />
+                            <button onClick={() => removeDetailImg(idx)}
+                              className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                              <X size={12} />
+                            </button>
+                            <p className="text-[10px] text-gray-400 text-center mt-1">{idx+1}번</p>
+                          </div>
+                        ))}
+                      </div>
+                    )
+                  }
+                </div>
+              )}
+            </div>
+
+            {/* 푸터 */}
+            <div className="px-5 py-4 border-t flex gap-2 justify-between items-center flex-shrink-0">
+              <div className="flex gap-1">
+                {TABS.map((t, i) => (
+                  <div key={t.key} className={`w-2 h-2 rounded-full ${activeTab===t.key ? 'bg-[#1976d2]' : 'bg-gray-200'}`} />
+                ))}
+              </div>
+              <div className="flex gap-2">
+                <button onClick={() => setModal(null)}
+                  className="px-4 py-2 text-sm border border-gray-200 rounded text-gray-500 hover:bg-gray-50">취소</button>
+                <button onClick={handleSave} disabled={saving}
+                  className="px-4 py-2 text-sm bg-[#1976d2] text-white rounded hover:bg-[#1565c0] disabled:opacity-50 font-medium">
+                  {saving ? '저장 중...' : '저장'}
+                </button>
+              </div>
             </div>
           </div>
         </div>
