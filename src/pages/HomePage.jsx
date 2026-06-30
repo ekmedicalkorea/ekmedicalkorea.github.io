@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
-import heroImg from '../assets/hero.png'
+
 
 const CAT_LABEL = { consumables: '의료소모품', devices: '의료기기', cosmetics: '화장품' }
 const categories = [
@@ -47,7 +47,7 @@ export default function HomePage() {
             </div>
           </div>
           <div className="hidden md:flex items-center justify-center">
-            <img src={heroImg} alt="EK 메디칼" className="h-48 w-auto object-contain drop-shadow-lg" />
+            <img src="/hero.png" alt="EK 메디칼" className="h-48 w-auto object-contain drop-shadow-lg" />
           </div>
         </div>
       </section>
