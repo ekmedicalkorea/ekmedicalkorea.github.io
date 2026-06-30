@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
+import heroImg from '../assets/hero.png'
 
 const CAT_LABEL = { consumables: '의료소모품', devices: '의료기기', cosmetics: '화장품' }
 const categories = [
@@ -37,17 +38,16 @@ export default function HomePage() {
               의료기기·소모품·화장품<br />한 곳에서 편리하게 주문하세요
             </h1>
             <div className="flex gap-3 flex-wrap">
-              <Link to="/products" className="bg-white text-[#1251A3] font-semibold px-6 py-2.5 rounded-lg hover:bg-blue-50 transition-colors">전체 제품 보기</Link>
-              <Link to="/order" className="border border-white/40 text-white font-medium px-6 py-2.5 rounded-lg hover:bg-white/10 transition-colors">주문 문의하기</Link>
+              <Link to="/products" className="bg-white text-[#1251A3] font-semibold px-6 py-2.5 rounded-lg hover:bg-blue-50 transition-colors">
+                전체 제품 보기
+              </Link>
+              <Link to="/order" className="border border-white/40 text-white font-medium px-6 py-2.5 rounded-lg hover:bg-white/10 transition-colors">
+                주문 문의하기
+              </Link>
             </div>
           </div>
-          <div className="hidden md:flex gap-4">
-            {[{ num: '200+', label: '공급 제품 수' }, { num: '3.2년', label: '평균 파트너십' }, { num: '4h', label: 'AS 응대' }].map((s, i) => (
-              <div key={i} className="bg-white/10 rounded-xl px-6 py-4 text-center backdrop-blur-sm">
-                <p className="text-2xl font-bold">{s.num}</p>
-                <p className="text-blue-200 text-sm mt-1">{s.label}</p>
-              </div>
-            ))}
+          <div className="hidden md:flex items-center justify-center">
+            <img src={heroImg} alt="EK 메디칼" className="h-48 w-auto object-contain drop-shadow-lg" />
           </div>
         </div>
       </section>
@@ -109,17 +109,19 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 하단 특징 */}
+      {/* 안내 배너 */}
       <section className="bg-white border-t border-b border-gray-200 py-8 px-6 lg:px-12">
         <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-          {[{ icon: '🚚', title: '빠른 배송', desc: '서울 당일 · 전국 익일' },
+          {[
+            { icon: '🚚', title: '빠른 배송', desc: '서울 당일 · 전국 익일' },
             { icon: '🔧', title: '전담 AS', desc: '4시간 이내 응대' },
             { icon: '📋', title: '견적서 제공', desc: '맞춤형 ROI 분석' },
-            { icon: '✅', title: '정품 보증', desc: '100% 공식 정품만 공급' }].map((f, i) => (
+            { icon: '✅', title: '정품 보증', desc: '100% 공식 정품만 공급' },
+          ].map((item, i) => (
             <div key={i}>
-              <div className="text-3xl mb-2">{f.icon}</div>
-              <p className="font-semibold text-gray-800 text-sm">{f.title}</p>
-              <p className="text-gray-400 text-xs mt-0.5">{f.desc}</p>
+              <div className="text-3xl mb-2">{item.icon}</div>
+              <p className="font-semibold text-gray-800 text-sm">{item.title}</p>
+              <p className="text-gray-400 text-xs mt-0.5">{item.desc}</p>
             </div>
           ))}
         </div>

@@ -1,8 +1,10 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
 export default function AuthModal({ onClose }) {
   const { signIn, signUp } = useAuth()
+  const navigate = useNavigate()
   const [mode, setMode] = useState('login')
   const [form, setForm] = useState({ name: '', email: '', password: '', confirm: '' })
   const [error, setError] = useState('')
@@ -25,8 +27,13 @@ export default function AuthModal({ onClose }) {
     if (error) {
       setError(error.message === 'Invalid login credentials' ? '이메일 또는 비밀번호가 올바르지 않습니다.' : error.message)
     } else {
-      if (mode === 'signup') setError('가입 완료! 이제 로그인하세요.')
-      else onClose()
+      if (mode === 'signup') {
+        setError('가입 완료! 이제 로그인하세요.')
+        setMode('login')
+      } else {
+        onClose()
+        navigate('/')
+      }
     }
   }
 
