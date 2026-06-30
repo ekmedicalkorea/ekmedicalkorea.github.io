@@ -1,37 +1,111 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../../../lib/supabase'
-import { Search } from 'lucide-react'
+import { Search, Plus, Pencil, X, Upload, Loader } from 'lucide-react'
 
 const CAT = { consumables:'의료소모품', devices:'의료기기', cosmetics:'화장품', injectables:'주사제' }
+const EMPTY_FORM = { name:'', category:'consumables', subcategory:'', price:'', unit:'', manufacturer:'', description:'', is_active:true, image_url:'' }
 
 export default function WebProducts() {
-  const [products, setProducts] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [search, setSearch] = useState('')
+  const [products, setProducts]   = useState([])
+  const [loading, setLoading]     = useState(true)
+  const [search, setSearch]       = useState('')
   const [catFilter, setCatFilter] = useState('all')
   const [stockEdits, setStockEdits] = useState({})
 
+  // 모달
+  const [modal, setModal]     = useState(null)   // null | 'new' | 'edit'
+  const [form, setForm]       = useState(EMPTY_FORM)
+  const [saving, setSaving]   = useState(false)
+  const [imgUploading, setImgUploading] = useState(false)
+  const [imgPreview, setImgPreview] = useState('')
+  const fileRef = useRef(null)
+
   async function load() {
     setLoading(true)
-    const { data } = await supabase.from('products').select('id,name,category,subcategory,price,unit,stock,is_active,manufacturer').order('name')
+    const { data } = await supabase.from('products')
+      .select('id,name,category,subcategory,price,unit,stock,is_active,manufacturer,description,image_url')
+      .order('name')
     setProducts(data || [])
     setLoading(false)
   }
-
   useEffect(() => { load() }, [])
 
+  /* ── 재고·활성 인라인 편집 ── */
   async function updateStock(id, val) {
     const stock = val === '' ? null : Math.max(0, parseInt(val) || 0)
     await supabase.from('products').update({ stock }).eq('id', id)
     setProducts(prev => prev.map(p => p.id === id ? { ...p, stock } : p))
     setStockEdits(prev => { const n = {...prev}; delete n[id]; return n })
   }
-
   async function toggleActive(id, current) {
     await supabase.from('products').update({ is_active: !current }).eq('id', id)
     setProducts(prev => prev.map(p => p.id === id ? { ...p, is_active: !current } : p))
   }
 
+  /* ── 모달 열기 ── */
+  function openNew() {
+    setForm(EMPTY_FORM)
+    setImgPreview('')
+    setModal('new')
+  }
+  function openEdit(p) {
+    setForm({
+      name: p.name||'', category: p.category||'consumables',
+      subcategory: p.subcategory||'', price: p.price||'',
+      unit: p.unit||'', manufacturer: p.manufacturer||'',
+      description: p.description||'', is_active: p.is_active,
+      image_url: p.image_url||''
+    })
+    setImgPreview(p.image_url||'')
+    setModal({ type:'edit', id: p.id })
+  }
+
+  /* ── 이미지 업로드 ── */
+  async function handleImgUpload(e) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setImgUploading(true)
+    const ext = file.name.split('.').pop()
+    const path = `${Date.now()}.${ext}`
+    const { error } = await supabase.storage.from('product-images').upload(path, file, { upsert: true })
+    if (!error) {
+      const { data: { publicUrl } } = supabase.storage.from('product-images').getPublicUrl(path)
+      setForm(f => ({ ...f, image_url: publicUrl }))
+      setImgPreview(publicUrl)
+    }
+    setImgUploading(false)
+  }
+
+  /* ── 저장 ── */
+  async function handleSave() {
+    if (!form.name.trim()) return alert('제품명을 입력하세요.')
+    setSaving(true)
+    const payload = {
+      name: form.name.trim(),
+      category: form.category,
+      subcategory: form.subcategory.trim() || null,
+      price: form.price ? String(form.price) : null,
+      unit: form.unit.trim() || null,
+      manufacturer: form.manufacturer.trim() || null,
+      description: form.description.trim() || null,
+      is_active: form.is_active,
+      image_url: form.image_url || null,
+    }
+    if (modal === 'new') {
+      const { error } = await supabase.from('products').insert(payload)
+      if (!error) { await load(); setModal(null) }
+      else alert('저장 실패: ' + error.message)
+    } else {
+      const { error } = await supabase.from('products').update(payload).eq('id', modal.id)
+      if (!error) {
+        setProducts(prev => prev.map(p => p.id === modal.id ? { ...p, ...payload } : p))
+        setModal(null)
+      } else alert('저장 실패: ' + error.message)
+    }
+    setSaving(false)
+  }
+
+  /* ── 필터 ── */
   const filtered = products.filter(p => {
     const matchCat = catFilter === 'all' || p.category === catFilter
     const q = search.trim().toLowerCase()
@@ -39,13 +113,14 @@ export default function WebProducts() {
     return matchCat && matchSearch
   })
 
-  const stockColor = (s) => s === null ? 'text-gray-400' : s === 0 ? 'text-red-600 font-bold' : s <= 10 ? 'text-orange-500 font-medium' : 'text-gray-700'
-
   return (
     <div>
       <div className="mb-4 pb-3 border-b border-gray-200 flex items-center justify-between">
         <h1 className="text-base font-semibold text-gray-800">제품 관리</h1>
-        <p className="text-xs text-gray-400">이미지 변경은 홈페이지 관리자 페이지를 이용하세요</p>
+        <button onClick={openNew}
+          className="flex items-center gap-1.5 bg-[#1976d2] text-white text-xs font-medium px-3 py-2 rounded hover:bg-[#1565c0] transition-colors">
+          <Plus size={13} /> 신규 등록
+        </button>
       </div>
 
       <div className="flex gap-2 mb-3 flex-wrap">
@@ -65,9 +140,9 @@ export default function WebProducts() {
 
       {loading ? <p className="text-sm text-gray-400 py-10 text-center">불러오는 중...</p> : (
         <div className="bg-white border border-gray-200 rounded overflow-x-auto">
-          <table className="w-full text-sm min-w-[600px]">
+          <table className="w-full text-sm min-w-[700px]">
             <thead className="bg-gray-50 border-b border-gray-100">
-              <tr>{['카테고리','제품명','가격','단위','재고','상태'].map(h => (
+              <tr>{['카테고리','제품명','가격','단위','재고','상태',''].map(h => (
                 <th key={h} className="px-3 py-2.5 text-left text-xs font-semibold text-gray-500">{h}</th>
               ))}</tr>
             </thead>
@@ -76,31 +151,43 @@ export default function WebProducts() {
                 <tr key={p.id} className="hover:bg-gray-50">
                   <td className="px-3 py-2"><span className="text-xs bg-blue-50 text-blue-700 px-1.5 py-0.5 rounded">{CAT[p.category]||p.category}</span></td>
                   <td className="px-3 py-2">
-                    <p className="text-xs font-medium text-gray-800 truncate max-w-[200px]">{p.name}</p>
-                    {p.manufacturer && <p className="text-[10px] text-gray-400">{p.manufacturer}</p>}
+                    <div className="flex items-center gap-2">
+                      {p.image_url
+                        ? <img src={p.image_url} className="w-7 h-7 rounded object-cover border border-gray-100 flex-shrink-0" />
+                        : <div className="w-7 h-7 rounded bg-gray-100 flex-shrink-0" />
+                      }
+                      <div>
+                        <p className="text-xs font-medium text-gray-800 truncate max-w-[180px]">{p.name}</p>
+                        {p.subcategory && <p className="text-[10px] text-gray-400">{p.subcategory}</p>}
+                        {p.manufacturer && <p className="text-[10px] text-gray-400">{p.manufacturer}</p>}
+                      </div>
+                    </div>
                   </td>
                   <td className="px-3 py-2 text-xs text-gray-700">{isNaN(Number(p.price)) ? p.price : Number(p.price).toLocaleString()+'원'}</td>
                   <td className="px-3 py-2 text-xs text-gray-500">{p.unit||'-'}</td>
                   <td className="px-3 py-2">
                     <div className="flex items-center gap-1">
-                      <input
-                        type="number" min="0"
+                      <input type="number" min="0"
                         value={stockEdits[p.id] ?? (p.stock ?? '')}
                         onChange={e => setStockEdits(prev => ({...prev, [p.id]: e.target.value}))}
                         onBlur={e => stockEdits[p.id] !== undefined && updateStock(p.id, e.target.value)}
                         placeholder="미관리"
-                        className={`w-16 border rounded px-2 py-1 text-xs text-center focus:outline-none focus:border-[#1976d2] ${
-                          p.stock===0 ? 'border-red-300 bg-red-50' : p.stock!==null && p.stock<=10 ? 'border-orange-300 bg-orange-50' : 'border-gray-200'
-                        } ${stockColor(p.stock)}`}
+                        className={`w-16 border rounded px-2 py-1 text-xs text-center focus:outline-none focus:border-[#1976d2] ${p.stock===0?'border-red-300 bg-red-50':p.stock!=null&&p.stock<=10?'border-orange-300 bg-orange-50':'border-gray-200'}`}
                       />
-                      {p.stock === 0 && <span className="text-[10px] text-red-500 font-bold">품절</span>}
-                      {p.stock !== null && p.stock > 0 && p.stock <= 10 && <span className="text-[10px] text-orange-500">부족</span>}
+                      {p.stock===0 && <span className="text-[10px] text-red-500 font-bold">품절</span>}
+                      {p.stock!=null && p.stock>0 && p.stock<=10 && <span className="text-[10px] text-orange-500">부족</span>}
                     </div>
                   </td>
                   <td className="px-3 py-2">
                     <button onClick={() => toggleActive(p.id, p.is_active)}
-                      className={`text-xs px-2 py-1 rounded-full font-medium ${p.is_active ? 'bg-green-50 text-green-600' : 'bg-gray-100 text-gray-400'}`}>
+                      className={`text-xs px-2 py-1 rounded-full font-medium ${p.is_active?'bg-green-50 text-green-600':'bg-gray-100 text-gray-400'}`}>
                       {p.is_active ? '판매중' : '숨김'}
+                    </button>
+                  </td>
+                  <td className="px-3 py-2">
+                    <button onClick={() => openEdit(p)}
+                      className="p-1.5 rounded text-gray-400 hover:text-[#1976d2] hover:bg-blue-50 transition-colors">
+                      <Pencil size={13} />
                     </button>
                   </td>
                 </tr>
@@ -108,6 +195,110 @@ export default function WebProducts() {
             </tbody>
           </table>
           {filtered.length === 0 && <p className="text-sm text-gray-400 py-8 text-center">검색 결과가 없습니다.</p>}
+        </div>
+      )}
+
+      {/* ── 수정/등록 모달 ── */}
+      {modal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40">
+          <div className="bg-white rounded-xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl">
+            <div className="flex items-center justify-between px-5 py-4 border-b">
+              <h2 className="font-semibold text-gray-800">{modal === 'new' ? '신규 제품 등록' : '제품 수정'}</h2>
+              <button onClick={() => setModal(null)} className="text-gray-400 hover:text-gray-600"><X size={18} /></button>
+            </div>
+
+            <div className="p-5 space-y-4">
+              {/* 이미지 */}
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1.5">제품 이미지</label>
+                <div className="flex items-center gap-3">
+                  {imgPreview
+                    ? <img src={imgPreview} className="w-20 h-20 object-cover rounded-lg border border-gray-200" />
+                    : <div className="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center"><Upload size={20} className="text-gray-300" /></div>
+                  }
+                  <div>
+                    <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleImgUpload} />
+                    <button onClick={() => fileRef.current?.click()}
+                      disabled={imgUploading}
+                      className="flex items-center gap-1.5 text-xs border border-gray-200 px-3 py-2 rounded hover:bg-gray-50 text-gray-600">
+                      {imgUploading ? <><Loader size={12} className="animate-spin" /> 업로드 중...</> : <><Upload size={12} /> 이미지 선택</>}
+                    </button>
+                    {imgPreview && (
+                      <button onClick={() => { setImgPreview(''); setForm(f => ({...f, image_url:''})) }}
+                        className="mt-1 text-xs text-red-400 hover:text-red-600 block">이미지 제거</button>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* 제품명 */}
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1">제품명 *</label>
+                <input value={form.name} onChange={e => setForm(f=>({...f,name:e.target.value}))}
+                  className="w-full border border-gray-200 rounded px-3 py-2 text-sm focus:outline-none focus:border-[#1976d2]" placeholder="제품명 입력" />
+              </div>
+
+              {/* 카테고리 + 하위카테고리 */}
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-medium text-gray-500 mb-1">카테고리</label>
+                  <select value={form.category} onChange={e => setForm(f=>({...f,category:e.target.value}))}
+                    className="w-full border border-gray-200 rounded px-3 py-2 text-sm focus:outline-none focus:border-[#1976d2]">
+                    {Object.entries(CAT).map(([k,v]) => <option key={k} value={k}>{v}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-500 mb-1">하위 카테고리</label>
+                  <input value={form.subcategory} onChange={e => setForm(f=>({...f,subcategory:e.target.value}))}
+                    className="w-full border border-gray-200 rounded px-3 py-2 text-sm focus:outline-none focus:border-[#1976d2]" placeholder="예: 주사침, 장갑" />
+                </div>
+              </div>
+
+              {/* 가격 + 단위 */}
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-medium text-gray-500 mb-1">가격 (원)</label>
+                  <input type="number" value={form.price} onChange={e => setForm(f=>({...f,price:e.target.value}))}
+                    className="w-full border border-gray-200 rounded px-3 py-2 text-sm focus:outline-none focus:border-[#1976d2]" placeholder="0" />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-500 mb-1">단위</label>
+                  <input value={form.unit} onChange={e => setForm(f=>({...f,unit:e.target.value}))}
+                    className="w-full border border-gray-200 rounded px-3 py-2 text-sm focus:outline-none focus:border-[#1976d2]" placeholder="예: 100EA/CASE" />
+                </div>
+              </div>
+
+              {/* 제조사 */}
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1">제조사</label>
+                <input value={form.manufacturer} onChange={e => setForm(f=>({...f,manufacturer:e.target.value}))}
+                  className="w-full border border-gray-200 rounded px-3 py-2 text-sm focus:outline-none focus:border-[#1976d2]" placeholder="제조사명" />
+              </div>
+
+              {/* 설명 */}
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1">제품 설명</label>
+                <textarea value={form.description} onChange={e => setForm(f=>({...f,description:e.target.value}))}
+                  rows={3} className="w-full border border-gray-200 rounded px-3 py-2 text-sm focus:outline-none focus:border-[#1976d2] resize-none" placeholder="제품 설명 입력" />
+              </div>
+
+              {/* 판매 상태 */}
+              <div className="flex items-center gap-2">
+                <input type="checkbox" id="is_active" checked={form.is_active} onChange={e => setForm(f=>({...f,is_active:e.target.checked}))}
+                  className="w-4 h-4 accent-[#1976d2]" />
+                <label htmlFor="is_active" className="text-sm text-gray-700">홈페이지에 판매중으로 표시</label>
+              </div>
+            </div>
+
+            <div className="px-5 py-4 border-t flex gap-2 justify-end">
+              <button onClick={() => setModal(null)}
+                className="px-4 py-2 text-sm border border-gray-200 rounded text-gray-500 hover:bg-gray-50">취소</button>
+              <button onClick={handleSave} disabled={saving}
+                className="px-4 py-2 text-sm bg-[#1976d2] text-white rounded hover:bg-[#1565c0] disabled:opacity-50 font-medium">
+                {saving ? '저장 중...' : '저장'}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

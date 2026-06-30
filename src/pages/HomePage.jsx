@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 
 
+const TEST_MARKER = "SUPABASE_VERSION_2026"
 const CAT_LABEL = { consumables: '의료소모품', devices: '의료기기', cosmetics: '화장품' }
 const categories = [
   { key: 'consumables', label: '의료소모품', icon: '💉', desc: '주사기, 장갑, 드레싱 등' },
@@ -129,3 +130,4 @@ export default function HomePage() {
     </div>
   )
 }
+// FORCE_BUILD_1782802374
