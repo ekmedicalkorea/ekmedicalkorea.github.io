@@ -1,0 +1,719 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="주식회사 이케이메디칼 — 의료기기, 미용, 건강기능식품 브랜드를 소개합니다." />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="이케이메디칼 | Beauty &amp; Health" />
+<title>이케이메디칼 | Beauty & Health</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap">
+<style>
+  :root {
+    --paper: #F8F5EF;
+    --paper-2: #FFFFFF;
+    --ink: #16283E;
+    --ink-soft: #33445C;
+    --muted: #5A6675;
+    --gold: #A8834B;
+    --gold-soft: #C4A876;
+    --mist-a: #DDE5EC;
+    --mist-b: #EDEAE1;
+    --line: #D8D2C6;
+    --card: #FFFFFF;
+    --ph-bg: #EFEBE2;
+    --ph-ink: #A79E8D;
+    --serif: 'Noto Serif KR', 'Nanum Myeongjo', serif;
+    --sans: 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+    --r-sm: 14px;
+    --r-md: 22px;
+    --r-lg: 30px;
+    --shadow-soft: 0 6px 30px rgba(22, 40, 62, .06);
+    --shadow-lift: 0 22px 50px rgba(22, 40, 62, .12);
+    --line-soft: color-mix(in srgb, var(--line) 55%, transparent);
+  }
+  :root:not([data-theme="light"]) {
+    @media (prefers-color-scheme: dark) {
+      --paper: #101A28;
+      --paper-2: #162335;
+      --ink: #EDE8DE;
+      --ink-soft: #C9CFDA;
+      --muted: #8E99A9;
+      --gold: #C4A876;
+      --gold-soft: #A8834B;
+      --mist-a: #1A2A40;
+      --mist-b: #14202F;
+      --line: #2A3A50;
+      --card: #162335;
+      --ph-bg: #1C2C42;
+      --ph-ink: #6C7A8E;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #101A28;
+    --paper-2: #162335;
+    --ink: #EDE8DE;
+    --ink-soft: #C9CFDA;
+    --muted: #8E99A9;
+    --gold: #C4A876;
+    --gold-soft: #A8834B;
+    --mist-a: #1A2A40;
+    --mist-b: #14202F;
+    --line: #2A3A50;
+    --card: #162335;
+    --ph-bg: #1C2C42;
+    --ph-ink: #6C7A8E;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-weight: 400;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--ink); text-decoration: none; }
+  a:hover { color: var(--gold); }
+  img { max-width: 100%; }
+
+  .eyebrow {
+    font-size: 12px; letter-spacing: .32em; text-transform: uppercase;
+    color: var(--gold); font-weight: 500;
+  }
+  .container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+
+  /* ---------- NAV ---------- */
+  header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+    transition: background .35s, box-shadow .35s;
+  }
+  header.scrolled {
+    background: color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: var(--shadow-soft);
+  }
+  .nav {
+    max-width: 1240px; margin: 0 auto; padding: 18px 32px;
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 24px;
+  }
+  .nav-side { display: flex; gap: 40px; font-size: 14.5px; font-weight: 500; letter-spacing: .02em; }
+  .nav-side.left { justify-content: flex-end; }
+  .nav-side.right { justify-content: flex-start; }
+  .nav-side a.active { color: var(--gold); }
+  .brand { text-align: center; line-height: 1.2; }
+  .brand .b1 { font-family: var(--serif); font-size: 21px; font-weight: 700; letter-spacing: .18em; }
+  .brand .b2 { font-size: 9.5px; letter-spacing: .5em; color: var(--muted); text-transform: uppercase; }
+
+  /* ---------- PAGES ---------- */
+  .page[hidden] { display: none; }
+
+  /* subpage header */
+  .page-head {
+    padding: 168px 0 64px; text-align: center;
+    background:
+      radial-gradient(60rem 26rem at 70% -30%, var(--mist-a), transparent 60%),
+      var(--paper);
+  }
+  .page-head h1 {
+    font-family: var(--serif); font-weight: 500;
+    font-size: clamp(30px, 4vw, 46px); margin: 14px 0 0; line-height: 1.35;
+  }
+  .page-head .lede { color: var(--muted); margin: 16px auto 0; max-width: 36em; font-weight: 300; }
+
+  /* ---------- HERO (home) ---------- */
+  .hero {
+    position: relative; min-height: 100svh;
+    display: flex; align-items: center; justify-content: center; text-align: center;
+    overflow: hidden;
+    background:
+      radial-gradient(90rem 50rem at 80% -10%, var(--mist-a), transparent 60%),
+      radial-gradient(70rem 40rem at 10% 110%, var(--mist-b), transparent 55%),
+      var(--paper);
+  }
+  .hero-orb {
+    position: absolute; border-radius: 50%; opacity: .55; filter: blur(40px);
+    background: radial-gradient(circle at 35% 35%, var(--mist-a), var(--mist-b) 70%, transparent);
+  }
+  .hero-orb.o1 { width: 420px; height: 420px; left: -120px; top: 12%; animation: drift 14s ease-in-out infinite alternate; }
+  .hero-orb.o2 { width: 260px; height: 260px; right: -60px; bottom: 16%; animation: drift 18s ease-in-out infinite alternate-reverse; }
+  @keyframes drift { from { transform: translateY(-14px); } to { transform: translateY(18px); } }
+
+  .hero-inner { position: relative; padding: 120px 24px 80px; }
+  .hero h1 {
+    font-family: var(--serif); font-weight: 500;
+    font-size: clamp(34px, 5.6vw, 66px);
+    line-height: 1.32; margin: 20px 0 24px; text-wrap: balance;
+  }
+  .hero .sub { font-size: clamp(14px, 1.6vw, 17px); color: var(--muted); font-weight: 300; letter-spacing: .04em; }
+  .scroll-hint {
+    position: absolute; bottom: 34px; left: 50%; transform: translateX(-50%);
+    font-size: 10.5px; letter-spacing: .3em; color: var(--muted); text-transform: uppercase;
+  }
+  .scroll-hint::after {
+    content: ""; display: block; width: 1px; height: 44px;
+    background: linear-gradient(var(--gold), transparent); margin: 10px auto 0;
+  }
+  .ph-note {
+    position: absolute; top: 96px; right: 20px;
+    font-size: 11.5px; color: var(--ph-ink);
+    border: 1px dashed var(--ph-ink); border-radius: 999px; padding: 5px 13px;
+    background: color-mix(in srgb, var(--paper) 70%, transparent);
+  }
+
+  /* home teaser: 3 category doors */
+  .doors { padding: 96px 0 110px; }
+  .doors-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; margin-top: 48px; }
+  .door {
+    background: var(--card); border: 1px solid var(--line-soft);
+    border-radius: var(--r-md); overflow: hidden;
+    box-shadow: var(--shadow-soft);
+    padding: 0 0 30px; display: flex; flex-direction: column; gap: 0;
+    transition: transform .35s ease, box-shadow .35s ease;
+  }
+  .door:hover { transform: translateY(-6px); box-shadow: var(--shadow-lift); color: var(--ink); }
+  .door-media {
+    aspect-ratio: 4 / 3;
+    display: flex; align-items: center; justify-content: center;
+    background: radial-gradient(120% 120% at 30% 20%, var(--mist-a), var(--ph-bg) 75%);
+  }
+  .door-media .ph { font-size: 12px; color: var(--ph-ink); border: 1px dashed var(--ph-ink); padding: 5px 14px; border-radius: 999px; background: color-mix(in srgb, var(--paper) 80%, transparent); }
+  .door .cat { font-size: 11.5px; letter-spacing: .2em; color: var(--muted); text-transform: uppercase; margin: 24px 26px 0; }
+  .door h3 { font-family: var(--serif); font-weight: 500; font-size: 22px; margin: 6px 26px 8px; }
+  .door .d { font-size: 14px; color: var(--muted); margin: 0 26px 18px; line-height: 1.7; }
+  .door .go { font-size: 12.5px; letter-spacing: .16em; color: var(--gold); margin: auto 26px 0; text-transform: uppercase; }
+
+  /* ---------- SECTIONS ---------- */
+  section { padding: 96px 0; }
+  .sec-head h2 {
+    font-family: var(--serif); font-weight: 500;
+    font-size: clamp(26px, 3.4vw, 40px); margin: 14px 0 0; line-height: 1.35; text-wrap: balance;
+  }
+
+  /* about */
+  .weare-grid { display: grid; grid-template-columns: 1fr 1.6fr; gap: 64px; align-items: start; }
+  .weare-copy p { margin: 0 0 1.2em; color: var(--ink-soft); max-width: 36em; }
+  .badges { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; margin-top: 44px; }
+  .badge {
+    background: var(--paper-2); padding: 28px 22px;
+    border-radius: var(--r-md); border: 1px solid var(--line-soft);
+    box-shadow: var(--shadow-soft);
+  }
+  .badge svg { width: 22px; height: 22px; stroke: var(--gold); fill: none; stroke-width: 1.5; }
+  .badge .t { font-weight: 700; font-size: 15px; margin: 12px 0 4px; }
+  .badge .d { font-size: 13px; color: var(--muted); line-height: 1.6; }
+  .company-table {
+    margin-top: 72px; background: var(--paper-2);
+    border: 1px solid var(--line-soft); border-radius: var(--r-md);
+    padding: 12px 28px; box-shadow: var(--shadow-soft);
+  }
+  .company-table .c-row:last-child { border-bottom: none; }
+  .c-row { display: grid; grid-template-columns: 160px 1fr; padding: 18px 4px; border-bottom: 1px solid var(--line-soft); font-size: 15px; }
+  .c-row .k { font-size: 11.5px; letter-spacing: .22em; color: var(--gold); text-transform: uppercase; padding-top: 4px; }
+
+  /* ribbon */
+  .ribbon { padding: 26px 0; border-top: 1px solid var(--line-soft); overflow: hidden; white-space: nowrap; }
+  .ribbon-track { display: inline-block; animation: slide 30s linear infinite; }
+  .ribbon span {
+    font-family: var(--serif); font-size: 15px; letter-spacing: .26em;
+    color: var(--muted); text-transform: uppercase; padding-right: 64px;
+  }
+  .ribbon b { color: var(--gold); font-weight: 500; }
+  @keyframes slide { to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) {
+    .ribbon-track, .hero-orb { animation: none; }
+  }
+
+  /* products */
+  .prod { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; padding: 64px 0; }
+  .prod + .prod { border-top: 1px solid var(--line-soft); }
+
+  /* product filter + grid (bsp-korea style) */
+  .filter-bar { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-bottom: 48px; }
+  .chip {
+    border: 1px solid var(--line-soft); background: var(--paper-2); color: var(--muted);
+    font: inherit; font-size: 13.5px; font-weight: 500; letter-spacing: .06em;
+    padding: 10px 26px; border-radius: 999px; cursor: pointer;
+    transition: background .25s, color .25s, border-color .25s, box-shadow .25s;
+  }
+  .chip:hover { color: var(--ink); border-color: var(--gold-soft); }
+  .chip.active { background: var(--ink); border-color: var(--ink); color: var(--paper); box-shadow: var(--shadow-soft); }
+  .chip:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+  .pgrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; }
+  .pcard {
+    background: var(--card); border: 1px solid var(--line-soft);
+    border-radius: var(--r-md); overflow: hidden;
+    box-shadow: var(--shadow-soft); padding-bottom: 26px;
+    transition: transform .35s ease, box-shadow .35s ease;
+  }
+  .pcard:hover { transform: translateY(-6px); box-shadow: var(--shadow-lift); }
+  .pcard[hidden] { display: none; }
+  .pcard .cat { font-size: 11px; letter-spacing: .18em; color: var(--muted); text-transform: uppercase; margin: 22px 24px 0; }
+  .pcard h3 { font-family: var(--serif); font-weight: 500; font-size: 21px; margin: 6px 24px 6px; }
+  .pcard .d { font-size: 13.5px; color: var(--muted); margin: 0 24px; line-height: 1.7; }
+  .prod:nth-child(even) .prod-media { order: 2; }
+  .prod-media {
+    aspect-ratio: 4 / 3; position: relative;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: var(--r-lg); overflow: hidden;
+    background: radial-gradient(120% 120% at 30% 20%, var(--mist-a), var(--ph-bg) 75%);
+    box-shadow: var(--shadow-soft);
+  }
+  .prod-media .ph { font-size: 12.5px; color: var(--ph-ink); border: 1px dashed var(--ph-ink); padding: 6px 16px; border-radius: 999px; background: color-mix(in srgb, var(--paper) 80%, transparent); }
+  .prod-no { font-family: var(--serif); font-size: 15px; color: var(--gold); letter-spacing: .12em; }
+  .prod h3 { font-family: var(--serif); font-weight: 500; font-size: clamp(23px, 2.6vw, 31px); margin: 10px 0 6px; line-height: 1.4; }
+  .prod .cat { font-size: 12.5px; letter-spacing: .2em; color: var(--muted); text-transform: uppercase; }
+  .prod p { color: var(--ink-soft); max-width: 30em; margin: 18px 0 26px; }
+  .btn-ghost {
+    display: inline-block; border: 1px solid color-mix(in srgb, var(--ink) 45%, transparent);
+    padding: 13px 38px; border-radius: 999px;
+    font-size: 13.5px; letter-spacing: .14em; font-weight: 500;
+    transition: background .3s ease, color .3s ease, box-shadow .3s ease, border-color .3s ease;
+  }
+  .btn-ghost:hover { background: var(--ink); border-color: var(--ink); color: var(--paper); box-shadow: var(--shadow-soft); }
+
+  /* news */
+  .news-empty {
+    border: 1px dashed var(--ph-ink); border-radius: var(--r-md);
+    padding: 56px 32px; text-align: center;
+    color: var(--ph-ink); font-size: 14px; margin-top: 8px;
+    background: color-mix(in srgb, var(--paper-2) 55%, transparent);
+  }
+
+  /* contact */
+  .contact-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 72px; align-items: start; }
+  .contact-grid .c-list { border-top: 1px solid var(--line); margin-top: 8px; }
+  .contact-grid .c-row { grid-template-columns: 110px 1fr; }
+  form { display: grid; gap: 18px; }
+  .f-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  label { font-size: 12px; letter-spacing: .14em; color: var(--muted); text-transform: uppercase; display: block; margin-bottom: 7px; }
+  input, textarea {
+    width: 100%; border: 1px solid var(--line-soft); border-radius: var(--r-sm);
+    background: var(--paper-2); padding: 13px 18px; font: inherit; font-size: 15px; color: var(--ink);
+    transition: border-color .25s, box-shadow .25s;
+  }
+  input:focus, textarea:focus { outline: none; border-color: var(--gold-soft); box-shadow: 0 0 0 4px color-mix(in srgb, var(--gold) 12%, transparent); }
+  .btn-ghost:focus-visible, a:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+  textarea { resize: vertical; min-height: 120px; }
+  button.btn-ghost { background: transparent; color: var(--ink); font-family: var(--sans); cursor: pointer; justify-self: start; }
+  .form-note { font-size: 12.5px; color: var(--ph-ink); }
+  .sent { color: var(--gold); font-size: 14px; }
+
+  /* footer */
+  footer { border-top: 1px solid var(--line-soft); padding: 44px 0 56px; font-size: 13px; color: var(--muted); }
+  .foot-grid { display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+  .lang-chip {
+    position: fixed; right: 22px; bottom: 22px; z-index: 40;
+    background: var(--paper-2); border: 1px solid var(--line-soft);
+    font-size: 12.5px; padding: 8px 18px; border-radius: 999px; color: var(--muted);
+    box-shadow: var(--shadow-soft);
+  }
+
+  /* reveal */
+  .rv { opacity: 0; transform: translateY(22px); transition: opacity .8s ease, transform .8s ease; }
+  .rv.in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) { .rv { opacity: 1; transform: none; transition: none; } }
+
+  @media (max-width: 860px) {
+    .nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 20px; padding: 12px 14px; }
+    .brand { width: 100%; order: -1; }
+    .nav-side { display: contents; }
+    .nav-side a { font-size: 13px; white-space: nowrap; }
+    .weare-grid, .contact-grid { grid-template-columns: 1fr; gap: 36px; }
+    .badges { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .doors-grid { grid-template-columns: 1fr; }
+    .prod { grid-template-columns: 1fr; gap: 28px; padding: 48px 0; }
+    .prod:nth-child(even) .prod-media { order: 0; }
+    .pgrid { grid-template-columns: 1fr; }
+    .f-2col { grid-template-columns: 1fr; }
+    section { padding: 64px 0; }
+    .page-head { padding: 148px 0 48px; }
+    .ph-note { top: 112px; }
+  }
+</style>
+</head>
+<body>
+
+
+<header id="hdr">
+  <nav class="nav" aria-label="주 메뉴">
+    <div class="nav-side left">
+      <a href="#/about" data-nav="about">회사 소개</a>
+      <a href="#/products" data-nav="products">제품</a>
+    </div>
+    <a class="brand" href="#/" aria-label="이케이메디칼 홈">
+      <div class="b1">EK MEDICAL</div>
+      <div class="b2">Beauty &amp; Health</div>
+    </a>
+    <div class="nav-side right">
+      <a href="#/news" data-nav="news">소식</a>
+      <a href="#/contact" data-nav="contact">저희에게 연락하세요</a>
+    </div>
+  </nav>
+</header>
+
+<!-- ============ HOME ============ -->
+<main class="page" data-page="home">
+  <section class="hero" style="padding: 0;">
+    <div class="hero-orb o1"></div>
+    <div class="hero-orb o2"></div>
+    <div class="ph-note">배경: 메인 영상 또는 촬영 이미지 자리</div>
+    <div class="hero-inner">
+      <div class="eyebrow">EK Medical Korea</div>
+      <h1>의료와 뷰티·헬스를 잇는<br>신뢰의 파트너.</h1>
+      <div class="sub">믿음직한 헬스 &amp; 뷰티 솔루션 파트너, 주식회사 이케이메디칼</div>
+    </div>
+    <div class="scroll-hint">Scroll</div>
+  </section>
+
+  <section class="doors">
+    <div class="container">
+      <div class="sec-head rv" style="text-align: center;">
+        <div class="eyebrow">Our Products</div>
+        <h2>세 가지 카테고리</h2>
+      </div>
+      <div class="doors-grid rv">
+        <a class="door" href="#/products-device">
+          <div class="door-media"><span class="ph">경추베개 이미지 자리</span></div>
+          <div class="cat">Medical Device</div>
+          <h3>의료기기</h3>
+          <div class="d">경추베개</div>
+          <div class="go">자세히 보기 →</div>
+        </a>
+        <a class="door" href="#/products-beauty">
+          <div class="door-media"><span class="ph">미용 대표 이미지 자리</span></div>
+          <div class="cat">Beauty</div>
+          <h3>미용</h3>
+          <div class="d">주사제 · 화장품 · 스킨부스터</div>
+          <div class="go">자세히 보기 →</div>
+        </a>
+        <a class="door" href="#/products-food">
+          <div class="door-media"><span class="ph">Solstice 이미지 자리</span></div>
+          <div class="cat">Health Functional Food</div>
+          <h3>건강기능식품</h3>
+          <div class="d">Solstice</div>
+          <div class="go">자세히 보기 →</div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <div class="ribbon" aria-hidden="true">
+    <div class="ribbon-track">
+      <span>Your Trusted Health &amp; Beauty Partner <b>·</b> EK Medical</span><span>Your Trusted Health &amp; Beauty Partner <b>·</b> EK Medical</span><span>Your Trusted Health &amp; Beauty Partner <b>·</b> EK Medical</span><span>Your Trusted Health &amp; Beauty Partner <b>·</b> EK Medical</span>
+    </div>
+  </div>
+</main>
+
+<!-- ============ ABOUT ============ -->
+<main class="page" data-page="about" hidden>
+  <div class="page-head">
+    <div class="eyebrow">We Are</div>
+    <h1>회사 소개</h1>
+    <p class="lede">병의원과 쌓아온 신뢰를, 일상의 건강과 아름다움으로.</p>
+  </div>
+  <section>
+    <div class="container weare-grid">
+      <div class="rv">
+        <h2 style="font-family: var(--serif); font-weight: 500; font-size: clamp(24px, 3vw, 34px); line-height: 1.45; margin: 0;">전문가의 기준으로,<br>한 담당자가 끝까지.</h2>
+      </div>
+      <div class="weare-copy rv">
+        <p>주식회사 이케이메디칼은 피부과·정형외과·재활의학과 전문 의료기기 유통 기업입니다. 기기 선정 컨설팅부터 납품, 교육, AS까지 한 담당자가 끝까지 책임지는 방식으로 병의원과 신뢰를 쌓아왔습니다.</p>
+        <p>이제 그 경험을 바탕으로 의료기기·화장품·건강기능식품까지, 전문가의 기준으로 선별한 헬스 &amp; 뷰티 솔루션을 소개합니다.</p>
+      </div>
+    </div>
+    <div class="container">
+      <div class="badges rv">
+        <div class="badge">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6z"></path><path d="M9 12l2 2 4-4"></path></svg>
+          <div class="t">정품 보증</div>
+          <div class="d">공식 인증을 거친 제품만 취급합니다</div>
+        </div>
+        <div class="badge">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 4-6 8-6s8 2 8 6"></path></svg>
+          <div class="t">전담 책임제</div>
+          <div class="d">상담부터 AS까지 한 담당자가 책임집니다</div>
+        </div>
+        <div class="badge">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h13v10H3z"></path><path d="M16 10h4l1 3v4h-5"></path><circle cx="7" cy="17" r="1.6"></circle><circle cx="17.5" cy="17" r="1.6"></circle></svg>
+          <div class="t">정확한 배송</div>
+          <div class="d">꼼꼼한 검수와 정확한 출고를 약속합니다</div>
+        </div>
+        <div class="badge">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3h8v4H8z"></path><path d="M6 7h12v14H6z"></path><path d="M9 12h6M9 16h4"></path></svg>
+          <div class="t">임상 현장의 기준</div>
+          <div class="d">병의원 유통 경험으로 제품을 선별합니다</div>
+        </div>
+      </div>
+      <div class="company-table rv">
+        <div class="c-row"><div class="k">상호명</div><div>주식회사 이케이메디칼</div></div>
+        <div class="c-row"><div class="k">대표자</div><div>최원제</div></div>
+        <div class="c-row"><div class="k">사업자등록번호</div><div>212-86-17374</div></div>
+        <div class="c-row"><div class="k">주소</div><div>경기도 광주시 중앙로 351, 2층 (송정동)</div></div>
+        <div class="c-row"><div class="k">사업영역</div><div>의료기기 도매업 · 판매 · 유통 · 공급</div></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ PRODUCTS (카테고리 선택) ============ -->
+<main class="page" data-page="products" hidden>
+  <div class="page-head">
+    <div class="eyebrow">Our Products</div>
+    <h1>제품</h1>
+    <p class="lede">가격이나 판매 없이, 브랜드와 제품 이야기를 소개합니다.<br>카테고리를 선택해주세요.</p>
+  </div>
+  <section style="padding-top: 24px;">
+    <div class="container">
+      <div class="doors-grid rv">
+        <a class="door" href="#/products-device">
+          <div class="door-media"><span class="ph">의료기기 대표 이미지 자리</span></div>
+          <div class="cat">Medical Device</div>
+          <h3>의료기기</h3>
+          <div class="d">경추베개</div>
+          <div class="go">보러 가기 →</div>
+        </a>
+        <a class="door" href="#/products-beauty">
+          <div class="door-media"><span class="ph">미용 대표 이미지 자리</span></div>
+          <div class="cat">Beauty</div>
+          <h3>미용</h3>
+          <div class="d">주사제 · 화장품 · 스킨부스터</div>
+          <div class="go">보러 가기 →</div>
+        </a>
+        <a class="door" href="#/products-food">
+          <div class="door-media"><span class="ph">건강기능식품 대표 이미지 자리</span></div>
+          <div class="cat">Health Functional Food</div>
+          <h3>건강기능식품</h3>
+          <div class="d">Solstice</div>
+          <div class="go">보러 가기 →</div>
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ PRODUCTS · 의료기기 ============ -->
+<main class="page" data-page="products-device" hidden>
+  <div class="page-head">
+    <div class="eyebrow">Medical Device</div>
+    <h1>의료기기</h1>
+  </div>
+  <section style="padding-top: 24px;">
+    <div class="container">
+      <div class="filter-bar rv" aria-label="제품 카테고리">
+        <a class="chip active" href="#/products-device">의료기기</a>
+        <a class="chip" href="#/products-beauty">미용</a>
+        <a class="chip" href="#/products-food">건강기능식품</a>
+      </div>
+      <div class="pgrid rv">
+        <div class="pcard">
+          <div class="door-media"><span class="ph">경추베개 이미지 자리</span></div>
+          <div class="cat">Medical Device</div>
+          <h3>경추베개</h3>
+          <div class="d">[제품 한 줄 소개 자리]</div>
+        </div>
+      </div>
+      <div style="text-align: center; margin-top: 56px;">
+        <a class="btn-ghost" href="#/contact">제품 문의하기</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ PRODUCTS · 미용 ============ -->
+<main class="page" data-page="products-beauty" hidden>
+  <div class="page-head">
+    <div class="eyebrow">Beauty</div>
+    <h1>미용</h1>
+  </div>
+  <section style="padding-top: 24px;">
+    <div class="container">
+      <div class="filter-bar rv" aria-label="제품 카테고리">
+        <a class="chip" href="#/products-device">의료기기</a>
+        <a class="chip active" href="#/products-beauty">미용</a>
+        <a class="chip" href="#/products-food">건강기능식품</a>
+      </div>
+      <div class="pgrid rv">
+        <div class="pcard">
+          <div class="door-media"><span class="ph">주사제 이미지 자리</span></div>
+          <div class="cat">Injectables · 주사제</div>
+          <h3>주사제</h3>
+          <div class="d">[제품 한 줄 소개 자리]</div>
+        </div>
+        <div class="pcard">
+          <div class="door-media"><span class="ph">화장품 이미지 자리</span></div>
+          <div class="cat">Cosmetics · 화장품</div>
+          <h3>화장품</h3>
+          <div class="d">[NML cosmetics — 제품 한 줄 소개 자리]</div>
+        </div>
+        <div class="pcard">
+          <div class="door-media"><span class="ph">스킨부스터 이미지 자리</span></div>
+          <div class="cat">Skin Booster · 스킨부스터</div>
+          <h3>스킨부스터</h3>
+          <div class="d">[제품 한 줄 소개 자리]</div>
+        </div>
+      </div>
+      <div style="text-align: center; margin-top: 56px;">
+        <a class="btn-ghost" href="#/contact">제품 문의하기</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ PRODUCTS · 건강기능식품 ============ -->
+<main class="page" data-page="products-food" hidden>
+  <div class="page-head">
+    <div class="eyebrow">Health Functional Food</div>
+    <h1>건강기능식품</h1>
+  </div>
+  <section style="padding-top: 24px;">
+    <div class="container">
+      <div class="filter-bar rv" aria-label="제품 카테고리">
+        <a class="chip" href="#/products-device">의료기기</a>
+        <a class="chip" href="#/products-beauty">미용</a>
+        <a class="chip active" href="#/products-food">건강기능식품</a>
+      </div>
+      <div class="pgrid rv">
+        <div class="pcard">
+          <div class="door-media"><span class="ph">Solstice 이미지 자리</span></div>
+          <div class="cat">Health Functional Food</div>
+          <h3>Solstice</h3>
+          <div class="d">[제품 한 줄 소개 자리]</div>
+        </div>
+      </div>
+      <div style="text-align: center; margin-top: 56px;">
+        <a class="btn-ghost" href="#/contact">제품 문의하기</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ NEWS ============ -->
+<main class="page" data-page="news" hidden>
+  <div class="page-head">
+    <div class="eyebrow">News</div>
+    <h1>소식</h1>
+    <p class="lede">이케이메디칼의 새로운 소식을 전해드립니다.</p>
+  </div>
+  <section style="padding-top: 40px;">
+    <div class="container rv">
+      <div class="news-empty">새로운 소식을 준비하고 있습니다.</div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ CONTACT ============ -->
+<main class="page" data-page="contact" hidden>
+  <div class="page-head">
+    <div class="eyebrow">Contact</div>
+    <h1>저희에게 연락하세요</h1>
+    <p class="lede">사업 제휴, 제품 상담, 공급 관련 문의를 환영합니다.</p>
+  </div>
+  <section style="padding-top: 48px;">
+    <div class="container contact-grid">
+      <div class="rv">
+        <div class="c-list">
+          <div class="c-row"><div class="k">Tel</div><div>031-762-6352</div></div>
+          <div class="c-row"><div class="k">Email</div><div>office@ekmedicalkorea.com</div></div>
+          <div class="c-row"><div class="k">Address</div><div>경기도 광주시 중앙로 351, 2층 (송정동)</div></div>
+          <div class="c-row"><div class="k">Hours</div><div>평일 09:00 – 18:00</div></div>
+        </div>
+      </div>
+      <form class="rv" id="cform" novalidate>
+        <div class="f-2col">
+          <div>
+            <label for="f-name">성함 / 소속</label>
+            <input id="f-name" name="name" type="text" autocomplete="name">
+          </div>
+          <div>
+            <label for="f-tel">연락처</label>
+            <input id="f-tel" name="tel" type="tel" autocomplete="tel">
+          </div>
+        </div>
+        <div>
+          <label for="f-email">이메일</label>
+          <input id="f-email" name="email" type="email" autocomplete="email">
+        </div>
+        <div>
+          <label for="f-msg">문의 내용</label>
+          <textarea id="f-msg" name="message"></textarea>
+        </div>
+        <button class="btn-ghost" type="submit">문의 보내기</button>
+        <div class="form-note">보내기를 누르면 메일 앱이 열리고, office@ekmedicalkorea.com 으로 접수됩니다.</div>
+        <div class="sent" id="sent" hidden>메일 앱이 열리지 않으면 office@ekmedicalkorea.com 으로 직접 보내주세요.</div>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container foot-grid">
+    <div>
+      주식회사 이케이메디칼 · 대표 최원제 · 사업자등록번호 212-86-17374<br>
+      경기도 광주시 중앙로 351, 2층 (송정동) · 031-762-6352
+    </div>
+    <div style="text-align: right;">
+      <a href="/#/shop" style="color: var(--gold); font-weight: 500;">EK 메디칼 e몰 바로가기 →</a><br>
+      © 2026 EK Medical Korea. All rights reserved.
+    </div>
+  </div>
+</footer>
+
+<div class="lang-chip">🇰🇷 한국어 · EN 준비 중</div>
+
+<script>
+  var hdr = document.getElementById('hdr');
+  function syncHdr() {
+    var onHome = currentRoute() === 'home';
+    hdr.classList.toggle('scrolled', !onHome || scrollY > 40);
+  }
+  addEventListener('scroll', syncHdr, { passive: true });
+
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.rv').forEach(function (el) { io.observe(el); });
+
+  var routes = ['home', 'about', 'products', 'products-device', 'products-beauty', 'products-food', 'news', 'contact'];
+  function currentRoute() {
+    var h = location.hash.replace(/^#\/?/, '') || 'home';
+    return routes.indexOf(h) >= 0 ? h : 'home';
+  }
+  function render() {
+    var r = currentRoute();
+    document.querySelectorAll('.page').forEach(function (p) {
+      p.hidden = p.getAttribute('data-page') !== r;
+    });
+    var navKey = r.indexOf('products') === 0 ? 'products' : r;
+    document.querySelectorAll('[data-nav]').forEach(function (a) {
+      a.classList.toggle('active', a.getAttribute('data-nav') === navKey);
+    });
+    scrollTo(0, 0);
+    syncHdr();
+  }
+  addEventListener('hashchange', render);
+  render();
+
+  document.getElementById('cform').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var f = e.target;
+    var body = [
+      '성함/소속: ' + f.name.value,
+      '연락처: ' + f.tel.value,
+      '이메일: ' + f.email.value,
+      '',
+      f.message.value
+    ].join('\n');
+    location.href = 'mailto:office@ekmedicalkorea.com?subject=' +
+      encodeURIComponent('[홈페이지 문의] ' + (f.name.value || '')) +
+      '&body=' + encodeURIComponent(body);
+    document.getElementById('sent').hidden = false;
+  });
+</script>
+
+</body>
+</html>
