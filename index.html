@@ -53,7 +53,7 @@
     </script>
     <script type="module" crossorigin src="/assets/index-CjarS4KY.js"></script>
     <link rel="stylesheet" crossorigin href="/assets/index-CPGvP5yH.css">
-  <script>(function(){function r(){var h=location.hash;if(h==="#/company"||h==="#/company/"||h==="#company"){location.replace("/company/")}}r();addEventListener("hashchange",r)})();</script>
+  <script>(function(){function c(){var h=location.hash;if(h==="#/company"||h==="#/company/"||h==="#company"){location.replace("/company/")}}var p=history.pushState,q=history.replaceState;history.pushState=function(){p.apply(this,arguments);c()};history.replaceState=function(){q.apply(this,arguments);c()};addEventListener("hashchange",c);addEventListener("popstate",c);c()})();</script>
   </head>
   <body>
     <div id="root"></div>
