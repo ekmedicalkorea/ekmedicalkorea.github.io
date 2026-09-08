@@ -185,15 +185,6 @@
   /* about */
   .weare-grid { display: grid; grid-template-columns: 1fr 1.6fr; gap: 64px; align-items: start; }
   .weare-copy p { margin: 0 0 1.2em; color: var(--ink-soft); max-width: 36em; }
-  .badges { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; margin-top: 44px; }
-  .badge {
-    background: var(--paper-2); padding: 28px 22px;
-    border-radius: var(--r-md); border: 1px solid var(--line-soft);
-    box-shadow: var(--shadow-soft);
-  }
-  .badge svg { width: 22px; height: 22px; stroke: var(--gold); fill: none; stroke-width: 1.5; }
-  .badge .t { font-weight: 700; font-size: 15px; margin: 12px 0 4px; }
-  .badge .d { font-size: 13px; color: var(--muted); line-height: 1.6; }
   .company-table {
     margin-top: 72px; background: var(--paper-2);
     border: 1px solid var(--line-soft); border-radius: var(--r-md);
@@ -412,28 +403,6 @@
       </div>
     </div>
     <div class="container">
-      <div class="badges rv">
-        <div class="badge">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6z"></path><path d="M9 12l2 2 4-4"></path></svg>
-          <div class="t">정품 보증</div>
-          <div class="d">공식 인증을 거친 제품만 취급합니다</div>
-        </div>
-        <div class="badge">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 4-6 8-6s8 2 8 6"></path></svg>
-          <div class="t">전담 책임제</div>
-          <div class="d">상담부터 AS까지 한 담당자가 책임집니다</div>
-        </div>
-        <div class="badge">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h13v10H3z"></path><path d="M16 10h4l1 3v4h-5"></path><circle cx="7" cy="17" r="1.6"></circle><circle cx="17.5" cy="17" r="1.6"></circle></svg>
-          <div class="t">정확한 배송</div>
-          <div class="d">꼼꼼한 검수와 정확한 출고를 약속합니다</div>
-        </div>
-        <div class="badge">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3h8v4H8z"></path><path d="M6 7h12v14H6z"></path><path d="M9 12h6M9 16h4"></path></svg>
-          <div class="t">임상 현장의 기준</div>
-          <div class="d">병의원 유통 경험으로 제품을 선별합니다</div>
-        </div>
-      </div>
       <div class="company-table rv">
         <div class="c-row"><div class="k">상호명</div><div>주식회사 이케이메디칼</div></div>
         <div class="c-row"><div class="k">대표자</div><div>최원제</div></div>
@@ -701,13 +670,13 @@
     function palette() {
       return dark()
         ? { blobs: ['rgba(46,74,112,0.50)', 'rgba(28,48,76,0.55)', 'rgba(196,168,118,0.10)', 'rgba(80,105,140,0.35)'], mote: '196,168,118' }
-        : { blobs: ['rgba(183,206,228,0.55)', 'rgba(238,231,214,0.65)', 'rgba(196,168,118,0.16)', 'rgba(255,255,255,0.55)'], mote: '168,131,75' };
+        : { blobs: ['rgba(178,205,231,0.26)', 'rgba(255,255,255,0.50)', 'rgba(235,224,200,0.28)', 'rgba(196,168,118,0.07)'], mote: '168,131,75' };
     }
     var blobs = [
-      { r: 0.55, sx: 0.11, sy: 0.07, px: 0.0, py: 2.1, ax: 0.30, ay: 0.22, cx: 0.28, cy: 0.30 },
-      { r: 0.62, sx: 0.08, sy: 0.10, px: 1.6, py: 0.4, ax: 0.26, ay: 0.20, cx: 0.74, cy: 0.62 },
-      { r: 0.40, sx: 0.13, sy: 0.09, px: 3.1, py: 4.2, ax: 0.24, ay: 0.26, cx: 0.62, cy: 0.22 },
-      { r: 0.34, sx: 0.10, sy: 0.12, px: 5.0, py: 1.2, ax: 0.22, ay: 0.18, cx: 0.30, cy: 0.74 }
+      { r: 0.42, sx: 0.11, sy: 0.07, px: 0.0, py: 2.1, ax: 0.16, ay: 0.12, cx: 0.16, cy: 0.24 },
+      { r: 0.46, sx: 0.08, sy: 0.10, px: 1.6, py: 0.4, ax: 0.14, ay: 0.10, cx: 0.80, cy: 0.34 },
+      { r: 0.36, sx: 0.13, sy: 0.09, px: 3.1, py: 4.2, ax: 0.14, ay: 0.14, cx: 0.78, cy: 0.80 },
+      { r: 0.30, sx: 0.10, sy: 0.12, px: 5.0, py: 1.2, ax: 0.12, ay: 0.10, cx: 0.18, cy: 0.80 }
     ];
     var motes = [];
     for (var i = 0; i < 24; i++) {
