@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="EK Medical Korea — your K-aesthetics market-entry partner for Southeast Asia. Skin boosters, dermocosmetics and health supplements with local registration support." />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="EK Medical | Global Partners" />
+<title>EK Medical Global Partners</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap">
+<style>
+  :root {
+    --paper: #F8F5EF; --paper-2: #FFFFFF; --ink: #16283E; --ink-soft: #33445C;
+    --muted: #5A6675; --gold: #A8834B; --gold-soft: #C4A876;
+    --mist-a: #DDE5EC; --mist-b: #EDEAE1; --line: #D8D2C6; --card: #FFFFFF;
+    --serif: 'Noto Serif KR', Georgia, serif;
+    --sans: 'Noto Sans KR', 'Segoe UI', sans-serif;
+    --r-md: 22px; --r-sm: 14px;
+    --shadow-soft: 0 6px 30px rgba(22, 40, 62, .06);
+    --line-soft: color-mix(in srgb, var(--line) 55%, transparent);
+  }
+  :root:not([data-theme="light"]) {
+    @media (prefers-color-scheme: dark) {
+      --paper: #101A28; --paper-2: #162335; --ink: #EDE8DE; --ink-soft: #C9CFDA;
+      --muted: #8E99A9; --gold: #C4A876; --gold-soft: #A8834B;
+      --mist-a: #1A2A40; --mist-b: #14202F; --line: #2A3A50; --card: #162335;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #101A28; --paper-2: #162335; --ink: #EDE8DE; --ink-soft: #C9CFDA;
+    --muted: #8E99A9; --gold: #C4A876; --gold-soft: #A8834B;
+    --mist-a: #1A2A40; --mist-b: #14202F; --line: #2A3A50; --card: #162335;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--sans); line-height: 1.75; -webkit-font-smoothing: antialiased; }
+  a { color: var(--ink); text-decoration: none; }
+  a:hover { color: var(--gold); }
+  img { max-width: 100%; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+  .eyebrow { font-size: 12px; letter-spacing: .32em; text-transform: uppercase; color: var(--gold); font-weight: 500; }
+
+  header { position: fixed; top: 0; left: 0; right: 0; z-index: 50; transition: background .35s, box-shadow .35s; }
+  header.scrolled { background: color-mix(in srgb, var(--paper) 88%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); box-shadow: var(--shadow-soft); }
+  .nav { max-width: 1240px; margin: 0 auto; padding: 18px 32px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+  .brand { line-height: 1.2; }
+  .brand .b1 { font-family: var(--serif); font-size: 20px; font-weight: 700; letter-spacing: .18em; }
+  .brand .b2 { font-size: 9px; letter-spacing: .5em; color: var(--muted); text-transform: uppercase; }
+  .nav-links { display: flex; gap: 28px; font-size: 14px; font-weight: 500; flex-wrap: wrap; }
+
+  .hero {
+    padding: 190px 0 110px; text-align: center;
+    background:
+      radial-gradient(70rem 34rem at 75% -20%, var(--mist-a), transparent 60%),
+      radial-gradient(50rem 26rem at 10% 120%, var(--mist-b), transparent 55%),
+      var(--paper);
+  }
+  .hero h1 { font-family: var(--serif); font-weight: 500; font-size: clamp(30px, 4.6vw, 52px); line-height: 1.35; margin: 18px auto 14px; max-width: 22em; text-wrap: balance; }
+  .hero .sub { color: var(--muted); font-weight: 300; font-size: clamp(14px, 1.6vw, 17px); max-width: 42em; margin: 0 auto; }
+  .cta-row { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 36px; }
+  .btn { display: inline-block; padding: 14px 36px; border-radius: 999px; font-size: 14px; letter-spacing: .08em; font-weight: 500; transition: all .3s ease; }
+  .btn-solid { background: var(--ink); color: var(--paper); border: 1px solid var(--ink); }
+  .btn-solid:hover { background: var(--gold); border-color: var(--gold); color: #fff; }
+  .btn-line { border: 1px solid color-mix(in srgb, var(--ink) 45%, transparent); color: var(--ink); }
+  .btn-line:hover { background: var(--ink); color: var(--paper); }
+
+  section { padding: 96px 0; }
+  section[id] { scroll-margin-top: 110px; }
+  .sec-head { text-align: center; margin-bottom: 56px; }
+  .sec-head h2 { font-family: var(--serif); font-weight: 500; font-size: clamp(24px, 3vw, 36px); margin: 12px 0 0; line-height: 1.4; }
+  .why-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+  .why {
+    background: var(--card); border: 1px solid var(--line-soft); border-radius: var(--r-md);
+    box-shadow: var(--shadow-soft); padding: 34px 30px;
+  }
+  .why .num { font-family: var(--serif); color: var(--gold); font-size: 15px; letter-spacing: .12em; }
+  .why h3 { font-family: var(--serif); font-weight: 500; font-size: 20px; margin: 8px 0 12px; line-height: 1.45; }
+  .why p { font-size: 14.5px; color: var(--ink-soft); margin: 0; }
+  .why .docs { font-size: 13px; color: var(--muted); margin-top: 14px; line-height: 1.7; }
+
+  .lineup { background: var(--paper-2); border-top: 1px solid var(--line-soft); border-bottom: 1px solid var(--line-soft); }
+  .line-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin-bottom: 56px; }
+  .line-card { background: var(--paper); border: 1px solid var(--line-soft); border-radius: var(--r-md); padding: 30px; }
+  .line-card h3 { font-family: var(--serif); font-weight: 500; font-size: 19px; margin: 0 0 8px; }
+  .line-card p { font-size: 14px; color: var(--muted); margin: 0; }
+  .pgrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
+  .pcard { background: var(--card); border: 1px solid var(--line-soft); border-radius: var(--r-sm); overflow: hidden; box-shadow: var(--shadow-soft); padding-bottom: 14px; }
+  .pcard img { width: 100%; display: block; background: #fff; }
+  .pcard .n { font-size: 12.5px; font-weight: 500; margin: 10px 14px 0; line-height: 1.5; }
+
+  .steps { counter-reset: step; max-width: 640px; margin: 0 auto; }
+  .step { display: grid; grid-template-columns: 52px 1fr; gap: 20px; padding: 22px 0; border-bottom: 1px solid var(--line-soft); align-items: start; }
+  .step:last-child { border-bottom: none; }
+  .step .no { font-family: var(--serif); font-size: 24px; color: var(--gold); }
+  .step .t { font-weight: 700; font-size: 15.5px; }
+  .step .d { font-size: 14px; color: var(--muted); }
+
+  .company { text-align: center; }
+  .company p.about { max-width: 44em; margin: 0 auto 36px; color: var(--ink-soft); }
+  .contact-line { font-size: 15px; color: var(--muted); line-height: 2; }
+  .contact-line b { color: var(--ink); font-weight: 500; }
+
+  footer { border-top: 1px solid var(--line-soft); padding: 40px 0 56px; font-size: 13px; color: var(--muted); text-align: center; }
+
+  @media (max-width: 900px) {
+    .why-grid { grid-template-columns: 1fr; }
+    .line-grid { grid-template-columns: 1fr; }
+    .pgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .hero { padding: 150px 0 80px; }
+    section { padding: 64px 0; }
+    .nav { padding: 14px 18px; }
+    .nav-links { gap: 16px; font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+
+<header id="hdr">
+  <nav class="nav" aria-label="Main menu">
+    <a class="brand" href="/global/">
+      <div class="b1">EK MEDICAL</div>
+      <div class="b2">Global Partners</div>
+    </a>
+    <div class="nav-links">
+      <a href="#why">Why Us</a>
+      <a href="#lineup">Lineup</a>
+      <a href="#how">How We Work</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="container">
+      <div class="eyebrow">EK Medical Korea</div>
+      <h1>Your K-Aesthetics market-entry partner<br>for Southeast Asia.</h1>
+      <p class="sub">Skin boosters · Dermocosmetics · Inner-beauty &amp; health supplements<br>From local registration to training and on-site support — with one partner.</p>
+      <div class="cta-row">
+        <a class="btn btn-solid" href="mailto:office@ekmedicalkorea.com?subject=Catalog%20Request">Request Catalog</a>
+        <a class="btn btn-line" href="https://wa.me/821043157707" target="_blank" rel="noopener">WhatsApp Inquiry</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="why">
+    <div class="container">
+      <div class="sec-head">
+        <div class="eyebrow">Why EK Medical</div>
+        <h2>What makes us different</h2>
+      </div>
+      <div class="why-grid">
+        <div class="why">
+          <div class="num">01</div>
+          <h3>We work on local registration with you</h3>
+          <p>We collaborate with our affiliated regulatory consulting company to prepare documents and support procedures for Thailand FDA, Vietnam MOH, Indonesia BPOM, Malaysia NPRA and Philippines FDA registration.</p>
+          <div class="docs">FSC · CoA · GMP certificate · Full ingredient list · MSDS · Certificate of Origin · Manufacturer's letter of authorization</div>
+        </div>
+        <div class="why">
+          <div class="num">02</div>
+          <h3>We provide what you need to sell</h3>
+          <p>We don't just ship products. We provide product training materials and treatment protocols, sample support, and joint participation in local exhibitions and seminars.</p>
+        </div>
+        <div class="why">
+          <div class="num">03</div>
+          <h3>Products proven in Korean clinics</h3>
+          <p>We curate core SKUs based on our supply experience with Korean clinics and aesthetic channels, concentrating volume for stable pricing and shelf life.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="lineup" id="lineup">
+    <div class="container">
+      <div class="sec-head">
+        <div class="eyebrow">Supply Lineup</div>
+        <h2>What we supply</h2>
+      </div>
+      <div class="line-grid">
+        <div class="line-card">
+          <h3>Skin Boosters</h3>
+          <p>Topical type (cosmetic registration) as our main line. Injectable options available on request for medical channels.</p>
+        </div>
+        <div class="line-card">
+          <h3>Dermocosmetics</h3>
+          <p>Clinic-grade pre/post-treatment care, ampoules and sun care. Catalog available on request.</p>
+        </div>
+        <div class="line-card">
+          <h3>Health Functional Foods — Soltice</h3>
+          <p>Registered as Health Functional Foods with Korea's MFDS. Full product grid below.</p>
+        </div>
+        <div class="line-card">
+          <h3>Healthcare Devices</h3>
+          <p>Cervical pillow and wellness devices. Secondary line — details on request.</p>
+        </div>
+      </div>
+
+      <div class="pgrid">
+        <div class="pcard"><img src="/company/assets/soltice/s01.jpg" alt="Soltice Multivitamin All-in-One" loading="lazy"><div class="n">Soltice Multivitamin All-in-One</div></div>
+        <div class="pcard"><img src="/company/assets/soltice/s02.jpg" alt="Soltice TamaFlex Joint &amp; Cartilage Protection 5days" loading="lazy"><div class="n">Soltice TamaFlex Joint &amp; Cartilage Protection 5days</div></div>
+        <div class="pcard"><img src="/company/assets/soltice/s03.jpg" alt="Soltice Clear Omega-3" loading="lazy"><div class="n">Soltice Clear Omega-3</div></div>
+        <div class="pcard"><img src="/company/assets/soltice/s04.jpg" alt="Soltice Blood Sugar Protection Pro S2" loading="lazy"><div class="n">Soltice Blood Sugar Protection Pro S2</div></div>
+        <div class="pcard"><img src="/company/assets/soltice/s05.jpg" alt="Soltice Cholesterol H/L" loading="lazy"><div class="n">Soltice Cholesterol H/L</div></div>
+        <div class="pcard"><img src="/company/assets/soltice/s06.jpg" alt="Soltice Raffinose Bowel Protection" loading="lazy"><div class="n">Soltice Raffinose Bowel Protection</div></div>
+        <div class="pcard"><img src="/company/assets/soltice/s07.jpg" alt="Soltice Prostate Protection for Men" loading="lazy"><div class="n">Soltice Prostate Protection for Men</div></div>
+        <div class="pcard"><img src="/company/assets/soltice/s08.jpg" alt="Soltice Eye Protection Pro S4" loading="lazy"><div class="n">Soltice Eye Protection Pro S4</div></div>
+        <div class="pcard"><img src="/company/assets/soltice/s09.jpg" alt="Soltice Liver Protection Pro S2" loading="lazy"><div class="n">Soltice Liver Protection Pro S2</div></div>
+        <div class="pcard"><img src="/company/assets/soltice/s10.jpg" alt="Soltice Bronchial Protection Rudicol" loading="lazy"><div class="n">Soltice Bronchial Protection Rudicol</div></div>
+        <div class="pcard"><img src="/company/assets/soltice/s11.jpg" alt="Soltice Vascular Clear Set" loading="lazy"><div class="n">Soltice Vascular Clear Set</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="how">
+    <div class="container">
+      <div class="sec-head">
+        <div class="eyebrow">How We Work</div>
+        <h2>From inquiry to exclusive territory</h2>
+      </div>
+      <div class="steps">
+        <div class="step"><div class="no">1</div><div><div class="t">Inquiry</div><div class="d">We send our catalog and price list.</div></div></div>
+        <div class="step"><div class="no">2</div><div><div class="t">Samples &amp; product training</div><div class="d">Sample shipment with training materials and treatment protocols.</div></div></div>
+        <div class="step"><div class="no">3</div><div><div class="t">Registration support</div><div class="d">Document preparation and procedure support for your market.</div></div></div>
+        <div class="step"><div class="no">4</div><div><div class="t">First order</div><div class="d">T/T payment, FOB Incheon or CIF to your port.</div></div></div>
+        <div class="step"><div class="no">5</div><div><div class="t">Reorder &amp; exclusive territory review</div><div class="d">Exclusive distributorship available for qualified partners.</div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="company" id="contact" style="background: var(--paper-2); border-top: 1px solid var(--line-soft);">
+    <div class="container">
+      <div class="sec-head" style="margin-bottom: 32px;">
+        <div class="eyebrow">Company</div>
+        <h2>EK Medical Korea Co., Ltd.</h2>
+      </div>
+      <p class="about">A Korean corporation engaged in wholesale distribution of medical devices, cosmetics and health functional foods, and pharmaceutical CSO. Together with our affiliated regulatory consulting company, we support Southeast Asian partners' market entry.</p>
+      <div class="cta-row" style="margin-bottom: 36px;">
+        <a class="btn btn-solid" href="mailto:office@ekmedicalkorea.com?subject=Catalog%20Request">Request Catalog</a>
+        <a class="btn btn-line" href="https://wa.me/821043157707" target="_blank" rel="noopener">WhatsApp +82 10-4315-7707</a>
+      </div>
+      <div class="contact-line">
+        <b>Address</b> · 2F, 351 Jungang-ro, Gwangju-si, Gyeonggi-do, Republic of Korea<br>
+        <b>Tel</b> · +82-31-762-6352 &nbsp; <b>Email</b> · office@ekmedicalkorea.com
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container">
+    EK Medical Korea Co., Ltd. · CEO Wonje Choi · Business Reg. 212-86-17374<br>
+    <a href="/company/en/" style="color: var(--gold);">Corporate site →</a>
+    <span style="margin: 0 8px;">·</span>
+    <a href="/company/" style="color: var(--gold);">한국어 회사소개 →</a>
+  </div>
+</footer>
+
+<script>
+  var hdr = document.getElementById('hdr');
+  addEventListener('scroll', function () { hdr.classList.toggle('scrolled', scrollY > 40); }, { passive: true });
+</script>
+</body>
+</html>
