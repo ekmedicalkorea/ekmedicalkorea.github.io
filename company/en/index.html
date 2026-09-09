@@ -232,8 +232,8 @@
   .pcard:hover { transform: translateY(-6px); box-shadow: var(--shadow-lift); }
   .pcard[hidden] { display: none; }
   .pcard .cat { font-size: 11px; letter-spacing: .18em; color: var(--muted); text-transform: uppercase; margin: 22px 24px 0; }
-  .pcard img.photo { width: 100%; display: block; background: #fff; }
-  .pcard img.photo + h3 { font-size: 16.5px; margin: 16px 20px 2px; line-height: 1.5; }
+  .pcard img.photo { width: 100%; display: block; background: #fff; aspect-ratio: 1 / 1.02; object-fit: cover; object-position: center; }
+  .pcard img.photo + h3 { font-size: 16.5px; margin: 16px 20px 2px; line-height: 1.5; min-height: 3em; }
   .pcard h3 { font-family: var(--serif); font-weight: 500; font-size: 21px; margin: 6px 24px 6px; }
   .pcard .d { font-size: 13.5px; color: var(--muted); margin: 0 24px; line-height: 1.7; }
   .prod:nth-child(even) .prod-media { order: 2; }

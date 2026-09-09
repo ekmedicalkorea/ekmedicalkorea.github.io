@@ -85,8 +85,8 @@
   .line-card p { font-size: 14px; color: var(--muted); margin: 0; }
   .pgrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
   .pcard { background: var(--card); border: 1px solid var(--line-soft); border-radius: var(--r-sm); overflow: hidden; box-shadow: var(--shadow-soft); padding-bottom: 14px; }
-  .pcard img { width: 100%; display: block; background: #fff; }
-  .pcard .n { font-size: 12.5px; font-weight: 500; margin: 10px 14px 0; line-height: 1.5; }
+  .pcard img { width: 100%; display: block; background: #fff; aspect-ratio: 1 / 1.02; object-fit: cover; object-position: center; }
+  .pcard .n { font-size: 12.5px; font-weight: 500; margin: 10px 14px 0; line-height: 1.5; min-height: 3em; }
 
   .steps { counter-reset: step; max-width: 640px; margin: 0 auto; }
   .step { display: grid; grid-template-columns: 52px 1fr; gap: 20px; padding: 22px 0; border-bottom: 1px solid var(--line-soft); align-items: start; }
