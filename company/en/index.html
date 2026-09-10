@@ -306,6 +306,16 @@
     background: color-mix(in srgb, var(--paper-2) 55%, transparent);
   }
 
+  /* news tabs & partners */
+  .partner-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+  .partner {
+    background: #fff; border: 1px solid var(--line-soft); border-radius: var(--r-md);
+    box-shadow: var(--shadow-soft); padding: 36px 28px;
+    display: flex; align-items: center; justify-content: center; min-height: 170px;
+  }
+  .partner img { max-height: 96px; max-width: 82%; object-fit: contain; }
+  @media (max-width: 860px) { .partner-grid { grid-template-columns: 1fr; } }
+
   /* contact */
   .contact-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 72px; align-items: start; }
   .contact-grid .c-list { border-top: 1px solid var(--line); margin-top: 8px; }
@@ -632,9 +642,26 @@
     <h1>News</h1>
     <p class="lede">The latest news from EK Medical.</p>
   </div>
-  <section style="padding-top: 40px;">
-    <div class="container rv">
-      <div class="news-empty">News coming soon.</div>
+  <section style="padding-top: 24px;">
+    <div class="container">
+      <div class="filter-bar rv" role="tablist" aria-label="News tabs">
+        <button class="chip active" data-ntab="notice">Notice</button>
+        <button class="chip" data-ntab="schedule">Schedule</button>
+        <button class="chip" data-ntab="partners">Partners</button>
+      </div>
+      <div class="ntab rv" data-npanel="notice">
+        <div class="news-empty">No notices yet.</div>
+      </div>
+      <div class="ntab" data-npanel="schedule" hidden>
+        <div class="news-empty">No upcoming events.</div>
+      </div>
+      <div class="ntab" data-npanel="partners" hidden>
+        <div class="partner-grid">
+          <div class="partner"><img src="/company/assets/soltice/logo_soltice.png" alt="Soltice"></div>
+          <div class="partner"><img src="/company/assets/logo_zoeheal.png" alt="Zoeheal"></div>
+          <div class="partner"><img src="/company/assets/logo_alliv.png" alt="ALLIV Wellness"></div>
+        </div>
+      </div>
     </div>
   </section>
 </main>
@@ -721,7 +748,7 @@
       sub: 'PN(Polynucleotide) + HA(Hyaluronic acid)',
       desc: 'A wound dressing combining PN and HA, a Class II medical device used to protect areas where the skin barrier is damaged, such as dry skin.',
       effect: 'Moisturizing and skin-barrier reinforcement · elasticity · soothing (ingredient properties of PN, HA, vitamin tree and chamomile extracts)',
-      pack: '1 Syringe / 1 Box · Shelf life: 24 months from manufacture',
+      pack: '1.0 mL syringe × 1 / 1 box · Shelf life: 24 months from manufacture',
       content: 'PN, HA, chamomile extract, vitamin tree extract, etc. · License No. 22-5026' },
     'pillow':   { name: 'Cervical Pillow', cat: 'Medical Device', backTo: '#/products-device', img: null, imgPh: 'Cervical pillow image placeholder', sub: PH, desc: PH, effect: PH, pack: PH, content: PH },
     's01': { name: 'Soltice Multivitamin All-in-One', sub: '19 vitamins &amp; minerals',
@@ -747,22 +774,22 @@
       desc: 'Raffinose for gut health in a powder stick.',
       effect: 'May help beneficial gut flora and regular bowel movement', pack: '6 g × 10 sticks (60 g) · powder',
       content: 'Contains raffinose 3,000 mg' },
-    's07': { name: 'Soltice Prostate Protection for Men', sub: 'Angelica gigas root extract complex (SHPro®)',
-      desc: 'Formulated with SHPro®, an Angelica gigas root extract complex for men&#39;s prostate health.',
+    's07': { name: 'Soltice Prostate Protection for Men', sub: 'Angelica gigas &amp; Astragalus extract complex (SHPro®)',
+      desc: 'Formulated with SHPro®, an MFDS-approved Angelica gigas and Astragalus extract complex for men&#39;s prostate health.',
       effect: 'May help maintain prostate health', pack: '700 mg × 20 tablets (14 g)',
-      content: 'SHPro® complex · decursin 231 mg, ononin 0.084 mg per daily serving' },
+      content: 'Angelica gigas &amp; Astragalus extract complex · SHPro® 600 mg per daily serving (2 tablets)' },
     's08': { name: 'Soltice Eye Protection Pro S4', sub: 'Astaxanthin 7 mg · beta-carotene',
       desc: 'Astaxanthin from Haematococcus extract for eye health.',
       effect: 'May help relieve eye fatigue', pack: '550 mg × 20 capsules (11 g)',
       content: 'Haematococcus extract · astaxanthin 7 mg, beta-carotene 2 mg per daily serving' },
     's09': { name: 'Soltice Liver Protection Pro S2', sub: 'Centella extract powder for liver health',
       desc: 'Centella asiatica extract powder for liver health.',
-      effect: 'May help support liver health', pack: '900 mg × 20 tablets (18 g)',
+      effect: 'May help protect liver health from non-alcoholic liver damage', pack: '900 mg × 20 tablets (18 g)',
       content: 'Centella extract powder · asiaticoside 4.23 mg per daily serving' },
     's10': { name: 'Soltice Bronchial Protection Rudicol', sub: 'Functional ingredient for bronchial health',
-      desc: 'Chrysanthemum indicum flower extract complex for bronchial health.',
-      effect: 'May help improve bronchial condition', pack: '850 mg × 14 tablets (11.9 g)',
-      content: 'Chrysanthemum extract complex · luteolin-7-glucoside 1.54 mg, dieckol 7.56 mg per daily serving' },
+      desc: 'Chrysanthemum indicum and Ecklonia cava extract complex for bronchial health.',
+      effect: 'May help improve tracheal and bronchial condition', pack: '850 mg × 14 tablets (11.9 g)',
+      content: 'Chrysanthemum-Ecklonia extract complex · luteolin-7-glucoside 1.54 mg, dieckol 7.56 mg per daily serving' },
     's11': { name: 'Soltice Vascular Clear Set', sub: 'Cholesterol H/L + Blood Sugar Protection Pro S2',
       desc: 'Two products for vascular health care in one set.',
       effect: 'May help improve blood cholesterol · moderate post-meal blood sugar',
@@ -817,6 +844,16 @@
   }
   addEventListener('hashchange', render);
   render();
+
+  /* news tabs */
+  document.querySelectorAll('[data-ntab]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('[data-ntab]').forEach(function (b) { b.classList.toggle('active', b === btn); });
+      document.querySelectorAll('[data-npanel]').forEach(function (p) {
+        p.hidden = p.getAttribute('data-npanel') !== btn.getAttribute('data-ntab');
+      });
+    });
+  });
 
   /* listing filter + search */
   document.querySelectorAll('.sub-filter').forEach(function (bar) {
