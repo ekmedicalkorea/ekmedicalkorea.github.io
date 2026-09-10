@@ -223,19 +223,60 @@
   .chip.active { background: var(--ink); border-color: var(--ink); color: var(--paper); box-shadow: var(--shadow-soft); }
   .chip:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
   .pgrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; }
-  .pcard {
-    background: var(--card); border: 1px solid var(--line-soft);
-    border-radius: var(--r-md); overflow: hidden;
-    box-shadow: var(--shadow-soft); padding-bottom: 26px;
-    transition: transform .35s ease, box-shadow .35s ease;
-  }
-  .pcard:hover { transform: translateY(-6px); box-shadow: var(--shadow-lift); }
+  /* flat product cards (bsp-korea style: image tile + centered name) */
+  .pcard { display: block; color: var(--ink); }
   .pcard[hidden] { display: none; }
-  .pcard .cat { font-size: 11px; letter-spacing: .18em; color: var(--muted); text-transform: uppercase; margin: 22px 24px 0; }
+  .pcard .door-media, .pcard img.photo {
+    border-radius: var(--r-sm); overflow: hidden;
+    transition: transform .3s ease, box-shadow .3s ease;
+  }
   .pcard img.photo { width: 100%; display: block; background: #fff; aspect-ratio: 1 / 1.02; object-fit: cover; object-position: center; }
-  .pcard img.photo + h3 { font-size: 16.5px; margin: 16px 20px 2px; line-height: 1.5; min-height: 3em; }
-  .pcard h3 { font-family: var(--serif); font-weight: 500; font-size: 21px; margin: 6px 24px 6px; }
-  .pcard .d { font-size: 13.5px; color: var(--muted); margin: 0 24px; line-height: 1.7; }
+  .pcard:hover .door-media, .pcard:hover img.photo { transform: translateY(-5px); box-shadow: var(--shadow-lift); }
+  .pcard:hover { color: var(--ink); }
+  .pcard h3 { font-family: var(--sans); font-weight: 700; font-size: 15.5px; margin: 16px 8px 2px; line-height: 1.5; text-align: center; min-height: 3em; }
+  .pcard .d { font-size: 13px; color: var(--muted); margin: 0 8px; text-align: center; }
+
+  /* sub-category filter + search (bsp-korea style) */
+  .sub-filter {
+    display: flex; align-items: center; justify-content: center; gap: 28px; flex-wrap: wrap;
+    background: var(--paper-2); border: 1px solid var(--line-soft); border-radius: var(--r-sm);
+    padding: 18px 24px; margin-bottom: 40px;
+  }
+  .fchk { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer; user-select: none; }
+  .fchk input { width: 16px; height: 16px; accent-color: var(--gold); cursor: pointer; }
+  .fsearch { flex: 1 1 220px; max-width: 340px; }
+  .fsearch input {
+    width: 100%; border: 1px solid var(--line-soft); border-radius: 999px;
+    background: var(--paper); padding: 10px 20px; font: inherit; font-size: 14px; color: var(--ink);
+  }
+  .fsearch input:focus { outline: none; border-color: var(--gold-soft); }
+
+  /* product detail (bsp-korea style) */
+  .pd-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: 56px; align-items: start; }
+  .pd-media {
+    border-radius: var(--r-md); overflow: hidden; background: #fff;
+    box-shadow: var(--shadow-soft); aspect-ratio: 1 / 1.02;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .pd-media img { width: 100%; height: 100%; object-fit: cover; }
+  .pd-media .ph { font-size: 13px; color: var(--ph-ink); border: 1px dashed var(--ph-ink); padding: 6px 16px; border-radius: 999px; }
+  .pd-info h1 { font-family: var(--serif); font-weight: 500; font-size: clamp(26px, 3vw, 36px); margin: 0 0 4px; line-height: 1.35; }
+  .pd-sub { font-weight: 700; font-size: 15px; margin-bottom: 14px; }
+  .pd-desc { color: var(--ink-soft); font-size: 15px; margin-bottom: 28px; }
+  .pd-rows { border-top: 2px solid var(--ink); }
+  .pd-rows details { border-bottom: 1px solid var(--line-soft); }
+  .pd-rows summary {
+    cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center;
+    padding: 16px 4px; font-size: 12.5px; letter-spacing: .22em; text-transform: uppercase; color: var(--gold); font-weight: 500;
+  }
+  .pd-rows summary::-webkit-details-marker { display: none; }
+  .pd-rows summary::after { content: "−"; font-size: 18px; color: var(--muted); }
+  .pd-rows details:not([open]) summary::after { content: "+"; }
+  .pd-rows .val { padding: 0 4px 18px; font-size: 14.5px; color: var(--ink-soft); }
+  .pd-btns { display: flex; gap: 14px; margin-top: 34px; flex-wrap: wrap; }
+  @media (max-width: 860px) {
+    .pd-grid { grid-template-columns: 1fr; gap: 28px; }
+  }
   .prod:nth-child(even) .prod-media { order: 2; }
   .prod-media {
     aspect-ratio: 4 / 3; position: relative;
@@ -466,12 +507,11 @@
         <a class="chip active" href="#/products-device">의료기기</a>
       </div>
       <div class="pgrid rv">
-        <div class="pcard">
+        <a class="pcard" href="#/product-pillow">
           <div class="door-media"><span class="ph">경추베개 이미지 자리</span></div>
-          <div class="cat">Medical Device</div>
           <h3>경추베개</h3>
-          <div class="d">[제품 한 줄 소개 자리]</div>
-        </div>
+          <div class="d">의료기기</div>
+        </a>
       </div>
       <div style="text-align: center; margin-top: 56px;">
         <a class="btn-ghost" href="#/contact">제품 문의하기</a>
@@ -493,38 +533,30 @@
         <a class="chip" href="#/products-food">건강기능식품</a>
         <a class="chip" href="#/products-device">의료기기</a>
       </div>
-      <div class="pgrid rv">
-        <div class="pcard">
-          <div class="door-media"><span class="ph">주사제 이미지 자리</span></div>
-          <div class="cat">Injectables · 주사제</div>
-          <h3>주사제</h3>
-          <div class="d">[제품 한 줄 소개 자리]</div>
-        </div>
-        <div class="pcard">
-          <div class="door-media"><span class="ph">화장품 이미지 자리</span></div>
-          <div class="cat">Cosmetics · 화장품</div>
-          <h3>화장품</h3>
-          <div class="d">[NML cosmetics — 제품 한 줄 소개 자리]</div>
-        </div>
-        <div class="pcard">
-          <div class="door-media"><span class="ph">스킨부스터 이미지 자리</span></div>
-          <div class="cat">Skin Booster · 스킨부스터</div>
-          <h3>스킨부스터</h3>
-          <div class="d">[제품 한 줄 소개 자리]</div>
-        </div>
-        <div class="pcard">
-          <div class="door-media"><span class="ph">인퓨스킨 이미지 자리</span></div>
-          <div class="cat">Beauty</div>
-          <h3>인퓨스킨</h3>
-          <div class="d">[제품 한 줄 소개 자리]</div>
-        </div>
-        <div class="pcard">
-          <div class="door-media"><span class="ph">제네스킨 이미지 자리</span></div>
-          <div class="cat">Beauty</div>
-          <h3>제네스킨</h3>
-          <div class="d">[제품 한 줄 소개 자리]</div>
-        </div>
+      <div class="sub-filter rv" aria-label="미용 세부 카테고리 필터">
+        <label class="fchk"><input type="checkbox" value="inject"><span>주사제</span></label>
+        <label class="fchk"><input type="checkbox" value="cosm"><span>화장품</span></label>
+        <label class="fchk"><input type="checkbox" value="booster"><span>스킨부스터</span></label>
+        <div class="fsearch"><input type="search" placeholder="제품 검색..." aria-label="제품 검색"></div>
       </div>
+      <div class="pgrid rv">
+        <a class="pcard" href="#/product-nml" data-sub="cosm" data-name="NML cosmetics 화장품">
+          <div class="door-media"><span class="ph">NML cosmetics 이미지 자리</span></div>
+          <h3>NML cosmetics</h3>
+          <div class="d">화장품</div>
+        </a>
+        <a class="pcard" href="#/product-infuskin" data-sub="booster" data-name="인퓨스킨 스킨부스터">
+          <div class="door-media"><span class="ph">인퓨스킨 이미지 자리</span></div>
+          <h3>인퓨스킨</h3>
+          <div class="d">스킨부스터</div>
+        </a>
+        <a class="pcard" href="#/product-geneskin" data-sub="booster" data-name="제네스킨 스킨부스터">
+          <div class="door-media"><span class="ph">제네스킨 이미지 자리</span></div>
+          <h3>제네스킨</h3>
+          <div class="d">스킨부스터</div>
+        </a>
+      </div>
+      <div class="no-result news-empty" hidden>조건에 맞는 제품이 없습니다.</div>
       <div style="text-align: center; margin-top: 56px;">
         <a class="btn-ghost" href="#/contact">제품 문의하기</a>
       </div>
@@ -545,21 +577,53 @@
         <a class="chip active" href="#/products-food">건강기능식품</a>
         <a class="chip" href="#/products-device">의료기기</a>
       </div>
-      <div class="pgrid rv">
-        <div class="pcard"><img class="photo" src="/company/assets/soltice/s01.jpg" alt="솔티스 멀티비타민 올인원" loading="lazy"><h3>솔티스 멀티비타민 올인원</h3></div>
-        <div class="pcard"><img class="photo" src="/company/assets/soltice/s02.jpg" alt="솔티스 타마플렉스 관절&amp;연골 프로텍션 5days" loading="lazy"><h3>솔티스 타마플렉스 관절&amp;연골 프로텍션 5days</h3></div>
-        <div class="pcard"><img class="photo" src="/company/assets/soltice/s03.jpg" alt="솔티스 투명한 오메가3" loading="lazy"><h3>솔티스 투명한 오메가3</h3></div>
-        <div class="pcard"><img class="photo" src="/company/assets/soltice/s04.jpg" alt="솔티스 혈당 프로텍션 프로 S2" loading="lazy"><h3>솔티스 혈당 프로텍션 프로 S2</h3></div>
-        <div class="pcard"><img class="photo" src="/company/assets/soltice/s05.jpg" alt="솔티스 콜레스테롤 H/L" loading="lazy"><h3>솔티스 콜레스테롤 H/L</h3></div>
-        <div class="pcard"><img class="photo" src="/company/assets/soltice/s06.jpg" alt="솔티스 라피노스 배변 프로텍션" loading="lazy"><h3>솔티스 라피노스 배변 프로텍션</h3></div>
-        <div class="pcard"><img class="photo" src="/company/assets/soltice/s07.jpg" alt="솔티스 전립선 프로텍션 포 맨" loading="lazy"><h3>솔티스 전립선 프로텍션 포 맨</h3></div>
-        <div class="pcard"><img class="photo" src="/company/assets/soltice/s08.jpg" alt="솔티스 눈프로텍션 프로 S4" loading="lazy"><h3>솔티스 눈프로텍션 프로 S4</h3></div>
-        <div class="pcard"><img class="photo" src="/company/assets/soltice/s09.jpg" alt="솔티스 간 프로텍션 프로 S2" loading="lazy"><h3>솔티스 간 프로텍션 프로 S2</h3></div>
-        <div class="pcard"><img class="photo" src="/company/assets/soltice/s10.jpg" alt="솔티스 기관지 프로텍션 루디콜" loading="lazy"><h3>솔티스 기관지 프로텍션 루디콜</h3></div>
-        <div class="pcard"><img class="photo" src="/company/assets/soltice/s11.jpg" alt="솔티스 혈관 클리어 세트" loading="lazy"><h3>솔티스 혈관 클리어 세트</h3></div>
+      <div class="sub-filter rv" aria-label="제품 검색">
+        <div class="fsearch"><input type="search" placeholder="제품 검색..." aria-label="제품 검색"></div>
       </div>
+      <div class="pgrid rv">
+        <a class="pcard" href="#/product-s01" data-name="솔티스 멀티비타민 올인원"><img class="photo" src="/company/assets/soltice/s01.jpg" alt="솔티스 멀티비타민 올인원" loading="lazy"><h3>솔티스 멀티비타민 올인원</h3><div class="d">건강기능식품</div></a>
+        <a class="pcard" href="#/product-s02" data-name="솔티스 타마플렉스 관절&amp;연골 프로텍션 5days"><img class="photo" src="/company/assets/soltice/s02.jpg" alt="솔티스 타마플렉스 관절&amp;연골 프로텍션 5days" loading="lazy"><h3>솔티스 타마플렉스 관절&amp;연골 프로텍션 5days</h3><div class="d">건강기능식품</div></a>
+        <a class="pcard" href="#/product-s03" data-name="솔티스 투명한 오메가3"><img class="photo" src="/company/assets/soltice/s03.jpg" alt="솔티스 투명한 오메가3" loading="lazy"><h3>솔티스 투명한 오메가3</h3><div class="d">건강기능식품</div></a>
+        <a class="pcard" href="#/product-s04" data-name="솔티스 혈당 프로텍션 프로 S2"><img class="photo" src="/company/assets/soltice/s04.jpg" alt="솔티스 혈당 프로텍션 프로 S2" loading="lazy"><h3>솔티스 혈당 프로텍션 프로 S2</h3><div class="d">건강기능식품</div></a>
+        <a class="pcard" href="#/product-s05" data-name="솔티스 콜레스테롤 H/L"><img class="photo" src="/company/assets/soltice/s05.jpg" alt="솔티스 콜레스테롤 H/L" loading="lazy"><h3>솔티스 콜레스테롤 H/L</h3><div class="d">건강기능식품</div></a>
+        <a class="pcard" href="#/product-s06" data-name="솔티스 라피노스 배변 프로텍션"><img class="photo" src="/company/assets/soltice/s06.jpg" alt="솔티스 라피노스 배변 프로텍션" loading="lazy"><h3>솔티스 라피노스 배변 프로텍션</h3><div class="d">건강기능식품</div></a>
+        <a class="pcard" href="#/product-s07" data-name="솔티스 전립선 프로텍션 포 맨"><img class="photo" src="/company/assets/soltice/s07.jpg" alt="솔티스 전립선 프로텍션 포 맨" loading="lazy"><h3>솔티스 전립선 프로텍션 포 맨</h3><div class="d">건강기능식품</div></a>
+        <a class="pcard" href="#/product-s08" data-name="솔티스 눈프로텍션 프로 S4"><img class="photo" src="/company/assets/soltice/s08.jpg" alt="솔티스 눈프로텍션 프로 S4" loading="lazy"><h3>솔티스 눈프로텍션 프로 S4</h3><div class="d">건강기능식품</div></a>
+        <a class="pcard" href="#/product-s09" data-name="솔티스 간 프로텍션 프로 S2"><img class="photo" src="/company/assets/soltice/s09.jpg" alt="솔티스 간 프로텍션 프로 S2" loading="lazy"><h3>솔티스 간 프로텍션 프로 S2</h3><div class="d">건강기능식품</div></a>
+        <a class="pcard" href="#/product-s10" data-name="솔티스 기관지 프로텍션 루디콜"><img class="photo" src="/company/assets/soltice/s10.jpg" alt="솔티스 기관지 프로텍션 루디콜" loading="lazy"><h3>솔티스 기관지 프로텍션 루디콜</h3><div class="d">건강기능식품</div></a>
+        <a class="pcard" href="#/product-s11" data-name="솔티스 혈관 클리어 세트"><img class="photo" src="/company/assets/soltice/s11.jpg" alt="솔티스 혈관 클리어 세트" loading="lazy"><h3>솔티스 혈관 클리어 세트</h3><div class="d">건강기능식품</div></a>
+      </div>
+      <div class="no-result news-empty" hidden>조건에 맞는 제품이 없습니다.</div>
       <div style="text-align: center; margin-top: 56px;">
         <a class="btn-ghost" href="#/contact">제품 문의하기</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ PRODUCT DETAIL ============ -->
+<main class="page" data-page="product-detail" hidden>
+  <div class="page-head" style="padding-bottom: 40px;">
+    <div class="eyebrow" id="pd-eyebrow">Product</div>
+  </div>
+  <section style="padding-top: 0;">
+    <div class="container pd-grid">
+      <div class="pd-media rv" id="pd-media"></div>
+      <div class="pd-info rv">
+        <h1 id="pd-name"></h1>
+        <div class="pd-sub" id="pd-sub"></div>
+        <p class="pd-desc" id="pd-desc"></p>
+        <div class="pd-rows">
+          <details open><summary>카테고리</summary><div class="val" id="pd-cat"></div></details>
+          <details open><summary>효과</summary><div class="val" id="pd-effect"></div></details>
+          <details open><summary>규격 · 포장</summary><div class="val" id="pd-pack"></div></details>
+          <details open><summary>성분 · 콘텐츠</summary><div class="val" id="pd-content"></div></details>
+          <details open><summary>가격</summary><div class="val">가격은 게시하지 않습니다. 시장과 주문 수량에 맞춰 견적을 제공해 드리니 문의해 주세요.</div></details>
+        </div>
+        <div class="pd-btns">
+          <a class="btn-ghost" href="#" id="pd-back">← 뒤로</a>
+          <a class="btn-ghost" href="#/contact" style="background: var(--ink); color: var(--paper);">문의하기 →</a>
+        </div>
       </div>
     </div>
   </section>
@@ -652,16 +716,58 @@
   document.querySelectorAll('.rv').forEach(function (el) { io.observe(el); });
 
   var routes = ['home', 'about', 'products', 'products-device', 'products-beauty', 'products-food', 'news', 'contact'];
+
+  var PH = '[문구 자리]';
+  var PRODUCTS = {
+    'nml':      { name: 'NML cosmetics', cat: '미용 → 화장품', backTo: '#/products-beauty', img: null, imgPh: 'NML cosmetics 이미지 자리', sub: PH, desc: PH, effect: PH, pack: PH, content: PH },
+    'infuskin': { name: '인퓨스킨', cat: '미용 → 스킨부스터', backTo: '#/products-beauty', img: null, imgPh: '인퓨스킨 이미지 자리', sub: PH, desc: PH, effect: PH, pack: PH, content: PH },
+    'geneskin': { name: '제네스킨', cat: '미용 → 스킨부스터', backTo: '#/products-beauty', img: null, imgPh: '제네스킨 이미지 자리', sub: PH, desc: PH, effect: PH, pack: PH, content: PH },
+    'pillow':   { name: '경추베개', cat: '의료기기', backTo: '#/products-device', img: null, imgPh: '경추베개 이미지 자리', sub: PH, desc: PH, effect: PH, pack: PH, content: PH }
+  };
+  var SOLTICE = [
+    ['s01', '솔티스 멀티비타민 올인원'], ['s02', '솔티스 타마플렉스 관절&연골 프로텍션 5days'],
+    ['s03', '솔티스 투명한 오메가3'], ['s04', '솔티스 혈당 프로텍션 프로 S2'],
+    ['s05', '솔티스 콜레스테롤 H/L'], ['s06', '솔티스 라피노스 배변 프로텍션'],
+    ['s07', '솔티스 전립선 프로텍션 포 맨'], ['s08', '솔티스 눈프로텍션 프로 S4'],
+    ['s09', '솔티스 간 프로텍션 프로 S2'], ['s10', '솔티스 기관지 프로텍션 루디콜'],
+    ['s11', '솔티스 혈관 클리어 세트']
+  ];
+  SOLTICE.forEach(function (p) {
+    PRODUCTS[p[0]] = { name: p[1], cat: '건강기능식품 → 솔티스 (Soltice)', backTo: '#/products-food', img: '/company/assets/soltice/' + p[0] + '.jpg', sub: PH, desc: PH, effect: PH, pack: PH, content: PH };
+  });
+
+  function fillDetail(id) {
+    var p = PRODUCTS[id];
+    var media = document.getElementById('pd-media');
+    media.innerHTML = '';
+    if (p.img) {
+      var im = document.createElement('img'); im.src = p.img; im.alt = p.name; media.appendChild(im);
+    } else {
+      var ph = document.createElement('span'); ph.className = 'ph'; ph.textContent = p.imgPh; media.appendChild(ph);
+    }
+    document.getElementById('pd-name').textContent = p.name;
+    document.getElementById('pd-sub').textContent = p.sub;
+    document.getElementById('pd-desc').textContent = p.desc;
+    document.getElementById('pd-cat').textContent = p.cat;
+    document.getElementById('pd-effect').textContent = p.effect;
+    document.getElementById('pd-pack').textContent = p.pack;
+    document.getElementById('pd-content').textContent = p.content;
+    document.getElementById('pd-back').setAttribute('href', p.backTo);
+  }
+
   function currentRoute() {
     var h = location.hash.replace(/^#\/?/, '') || 'home';
+    if (h.indexOf('product-') === 0 && PRODUCTS[h.slice(8)]) return h;
     return routes.indexOf(h) >= 0 ? h : 'home';
   }
   function render() {
     var r = currentRoute();
+    var pageKey = r.indexOf('product-') === 0 ? 'product-detail' : r;
+    if (pageKey === 'product-detail') fillDetail(r.slice(8));
     document.querySelectorAll('.page').forEach(function (p) {
-      p.hidden = p.getAttribute('data-page') !== r;
+      p.hidden = p.getAttribute('data-page') !== pageKey;
     });
-    var navKey = r.indexOf('products') === 0 ? 'products' : r;
+    var navKey = r.indexOf('product') === 0 ? 'products' : r;
     document.querySelectorAll('[data-nav]').forEach(function (a) {
       a.classList.toggle('active', a.getAttribute('data-nav') === navKey);
     });
@@ -670,6 +776,28 @@
   }
   addEventListener('hashchange', render);
   render();
+
+  /* listing filter + search */
+  document.querySelectorAll('.sub-filter').forEach(function (bar) {
+    var scope = bar.closest('section');
+    var cards = scope.querySelectorAll('.pcard');
+    var empty = scope.querySelector('.no-result');
+    function apply() {
+      var checked = [...bar.querySelectorAll('input[type="checkbox"]:checked')].map(function (c) { return c.value; });
+      var q = (bar.querySelector('input[type="search"]') || { value: '' }).value.trim().toLowerCase();
+      var visible = 0;
+      cards.forEach(function (card) {
+        var okSub = checked.length === 0 || checked.indexOf(card.getAttribute('data-sub')) >= 0;
+        var name = (card.getAttribute('data-name') || card.textContent).toLowerCase();
+        var okQ = !q || name.indexOf(q) >= 0;
+        card.hidden = !(okSub && okQ);
+        if (okSub && okQ) visible++;
+      });
+      if (empty) empty.hidden = visible > 0;
+    }
+    bar.addEventListener('change', apply);
+    bar.addEventListener('input', apply);
+  });
 
   /* hero background: slow drifting light + gold motes */
   (function () {
