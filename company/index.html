@@ -537,7 +537,6 @@
         <label class="fchk"><input type="checkbox" value="inject"><span>주사제</span></label>
         <label class="fchk"><input type="checkbox" value="cosm"><span>화장품</span></label>
         <label class="fchk"><input type="checkbox" value="booster"><span>스킨부스터</span></label>
-        <div class="fsearch"><input type="search" placeholder="제품 검색..." aria-label="제품 검색"></div>
       </div>
       <div class="pgrid rv">
         <a class="pcard" href="#/product-nml" data-sub="cosm" data-name="NML cosmetics 화장품">
@@ -550,8 +549,8 @@
           <h3>인퓨스킨</h3>
           <div class="d">스킨부스터</div>
         </a>
-        <a class="pcard" href="#/product-geneskin" data-sub="booster" data-name="제네스킨 스킨부스터">
-          <div class="door-media"><span class="ph">제네스킨 이미지 자리</span></div>
+        <a class="pcard" href="#/product-geneskin" data-sub="booster" data-name="제네스킨 GENESKIN 스킨부스터">
+          <img class="photo" src="/company/assets/geneskin.jpg" alt="제네스킨" loading="lazy">
           <h3>제네스킨</h3>
           <div class="d">스킨부스터</div>
         </a>
@@ -576,9 +575,6 @@
         <a class="chip" href="#/products-beauty">미용</a>
         <a class="chip active" href="#/products-food">건강기능식품</a>
         <a class="chip" href="#/products-device">의료기기</a>
-      </div>
-      <div class="sub-filter rv" aria-label="제품 검색">
-        <div class="fsearch"><input type="search" placeholder="제품 검색..." aria-label="제품 검색"></div>
       </div>
       <div class="pgrid rv">
         <a class="pcard" href="#/product-s01" data-name="솔티스 멀티비타민 올인원"><img class="photo" src="/company/assets/soltice/s01.jpg" alt="솔티스 멀티비타민 올인원" loading="lazy"><h3>솔티스 멀티비타민 올인원</h3><div class="d">건강기능식품</div></a>
@@ -721,19 +717,64 @@
   var PRODUCTS = {
     'nml':      { name: 'NML cosmetics', cat: '미용 → 화장품', backTo: '#/products-beauty', img: null, imgPh: 'NML cosmetics 이미지 자리', sub: PH, desc: PH, effect: PH, pack: PH, content: PH },
     'infuskin': { name: '인퓨스킨', cat: '미용 → 스킨부스터', backTo: '#/products-beauty', img: null, imgPh: '인퓨스킨 이미지 자리', sub: PH, desc: PH, effect: PH, pack: PH, content: PH },
-    'geneskin': { name: '제네스킨', cat: '미용 → 스킨부스터', backTo: '#/products-beauty', img: null, imgPh: '제네스킨 이미지 자리', sub: PH, desc: PH, effect: PH, pack: PH, content: PH },
-    'pillow':   { name: '경추베개', cat: '의료기기', backTo: '#/products-device', img: null, imgPh: '경추베개 이미지 자리', sub: PH, desc: PH, effect: PH, pack: PH, content: PH }
+    'geneskin': { name: '제네스킨 GENESKIN®', cat: '미용 → 스킨부스터', backTo: '#/products-beauty', img: '/company/assets/geneskin.jpg',
+      sub: 'PN(Polynucleotide) + HA(Hyaluronic acid)',
+      desc: 'PN과 HA 복합 성분의 창상피복재로, 건조피부 등 피부장벽이 손상된 부위를 보호하기 위해 사용하는 의료기기(2등급)입니다.',
+      effect: '보습 및 피부장벽 강화 · 피부 탄력 · 피부 진정 (PN, HA, 비타민나무·캐모마일 추출물의 성분 특성)',
+      pack: '1 Syringe / 1 Box · 사용기간: 제조일로부터 24개월',
+      content: 'PN, HA, 카모마일 추출물, 비타민나무 추출물 등 · 허가번호 제인 22-5026호' },
+    'pillow':   { name: '경추베개', cat: '의료기기', backTo: '#/products-device', img: null, imgPh: '경추베개 이미지 자리', sub: PH, desc: PH, effect: PH, pack: PH, content: PH },
+    's01': { name: '솔티스 멀티비타민 올인원', sub: '19가지 비타민 & 미네랄',
+      desc: '하루 한 정으로 비타민과 미네랄 19종을 함께 섭취하는 멀티비타민입니다.',
+      effect: '1일 섭취량 당 비타민·미네랄 19종 함유', pack: '500 mg × 30정 (15 g)', content: '비타민 & 미네랄 19종' },
+    's02': { name: '솔티스 타마플렉스 관절&연골 프로텍션 5days', sub: '타마플렉스(TamaFlex®) 함유',
+      desc: '관절 및 연골 건강에 도움을 줄 수 있는 타마린드·강황 추출복합물(TamaFlex®)을 담았습니다.',
+      effect: '관절 및 연골 건강에 도움을 줄 수 있음', pack: '700 mg × 10정 (7 g)',
+      content: '타마린드강황추출복합물(TamaFlex®) · 1일 섭취량 당 프로토카테츄산 0.11 mg, 커큐민 12.025 mg' },
+    's03': { name: '솔티스 투명한 오메가3', sub: '국내 최초 투명한 오메가3',
+      desc: '맑고 투명한 캡슐에 담은 오메가3입니다.',
+      effect: '혈중 중성지질 개선과 혈행 개선에 도움을 줄 수 있음', pack: '500 mg × 20캡슐 (10 g)',
+      content: 'EPA 및 DHA 함유 유지 · 1일 섭취량 당 EPA와 DHA의 합 600 mg' },
+    's04': { name: '솔티스 혈당 프로텍션 프로 S2', sub: '귀리식이섬유 분말 스틱',
+      desc: '식후 혈당 상승 억제에 도움을 줄 수 있는 귀리식이섬유를 스틱 분말로 간편하게 섭취합니다.',
+      effect: '식후 혈당 상승 억제에 도움을 줄 수 있음', pack: '4 g × 20포 (80 g) · 분말 스틱',
+      content: '귀리식이섬유 · 1일 섭취량 당 식이섬유 6 g 함유' },
+    's05': { name: '솔티스 콜레스테롤 H/L', sub: '모나콜린 K · 밀크씨슬 · 아연 함유',
+      desc: '홍국과 밀크씨슬추출물, 아연을 한 캡슐에 담았습니다.',
+      effect: '혈중 콜레스테롤 개선과 간 건강에 도움을 줄 수 있음', pack: '500 mg × 30캡슐 (15 g)',
+      content: '1일 섭취량 당 총 모나콜린 K 4 mg, 실리마린 130 mg · 아연' },
+    's06': { name: '솔티스 라피노스 배변 프로텍션', sub: '라피노스 3,000 mg 함유',
+      desc: '장 건강을 위한 라피노스를 스틱 분말로 담았습니다.',
+      effect: '장내 유익균 증식과 원활한 배변활동에 도움을 줄 수 있음', pack: '6 g × 10포 (60 g) · 분말 스틱',
+      content: '라피노스 3,000 mg 함유' },
+    's07': { name: '솔티스 전립선 프로텍션 포 맨', sub: '참당귀뿌리추출복합물(SHPro®)',
+      desc: '남성 전립선 건강을 위한 참당귀뿌리추출복합물(SHPro®)을 담았습니다.',
+      effect: '전립선 건강 유지에 도움을 줄 수 있음', pack: '700 mg × 20정 (14 g)',
+      content: '참당귀뿌리추출복합물(SHPro®) · 1일 섭취량 당 데커신 231 mg, 오노닌 0.084 mg' },
+    's08': { name: '솔티스 눈프로텍션 프로 S4', sub: '아스타잔틴 7 mg · 베타카로틴 함유',
+      desc: '헤마토코쿠스 추출물의 아스타잔틴으로 눈 건강을 관리합니다.',
+      effect: '눈의 피로도 개선에 도움을 줄 수 있음', pack: '550 mg × 20캡슐 (11 g)',
+      content: '헤마토코쿠스 추출물 · 1일 섭취량 당 아스타잔틴 7 mg, 베타카로틴 2 mg' },
+    's09': { name: '솔티스 간 프로텍션 프로 S2', sub: '간 건강 신소재 병풀추출분말',
+      desc: '병풀추출분말로 간 건강을 관리하는 제품입니다.',
+      effect: '간 건강에 도움을 줄 수 있음', pack: '900 mg × 20정 (18 g)',
+      content: '병풀추출분말 · 1일 섭취량 당 아시아티코사이드 4.23 mg' },
+    's10': { name: '솔티스 기관지 프로텍션 루디콜', sub: '기관지 건강 기능성 신소재',
+      desc: '감국꽃추출복합물로 기관지 건강을 관리하는 제품입니다.',
+      effect: '기관지 상태 개선에 도움을 줄 수 있음', pack: '850 mg × 14정 (11.9 g)',
+      content: '감국꽃추출복합물 · 1일 섭취량 당 루테올린-7-글루코사이드 1.54 mg, 디에콜 7.56 mg' },
+    's11': { name: '솔티스 혈관 클리어 세트', sub: '콜레스테롤 H/L + 혈당 프로텍션 프로 S2',
+      desc: '혈관 건강 관리를 위한 두 제품을 하나의 세트로 구성했습니다.',
+      effect: '혈중 콜레스테롤 개선 · 식후 혈당 상승 억제에 도움을 줄 수 있음',
+      pack: '세트 구성: 콜레스테롤 H/L (500 mg × 30캡슐) + 혈당 프로텍션 프로 S2 (4 g × 20포)',
+      content: '구성품 정보는 각 제품 페이지를 참고해 주세요' }
   };
-  var SOLTICE = [
-    ['s01', '솔티스 멀티비타민 올인원'], ['s02', '솔티스 타마플렉스 관절&연골 프로텍션 5days'],
-    ['s03', '솔티스 투명한 오메가3'], ['s04', '솔티스 혈당 프로텍션 프로 S2'],
-    ['s05', '솔티스 콜레스테롤 H/L'], ['s06', '솔티스 라피노스 배변 프로텍션'],
-    ['s07', '솔티스 전립선 프로텍션 포 맨'], ['s08', '솔티스 눈프로텍션 프로 S4'],
-    ['s09', '솔티스 간 프로텍션 프로 S2'], ['s10', '솔티스 기관지 프로텍션 루디콜'],
-    ['s11', '솔티스 혈관 클리어 세트']
-  ];
-  SOLTICE.forEach(function (p) {
-    PRODUCTS[p[0]] = { name: p[1], cat: '건강기능식품 → 솔티스 (Soltice)', backTo: '#/products-food', img: '/company/assets/soltice/' + p[0] + '.jpg', sub: PH, desc: PH, effect: PH, pack: PH, content: PH };
+  Object.keys(PRODUCTS).forEach(function (id) {
+    if (id.charAt(0) === 's' && id.length === 3) {
+      PRODUCTS[id].cat = '건강기능식품 → 솔티스 (Soltice)';
+      PRODUCTS[id].backTo = '#/products-food';
+      PRODUCTS[id].img = '/company/assets/soltice/' + id + '.jpg';
+    }
   });
 
   function fillDetail(id) {

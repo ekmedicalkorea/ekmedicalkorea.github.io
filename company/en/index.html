@@ -537,7 +537,6 @@
         <label class="fchk"><input type="checkbox" value="inject"><span>Injectables</span></label>
         <label class="fchk"><input type="checkbox" value="cosm"><span>Cosmetics</span></label>
         <label class="fchk"><input type="checkbox" value="booster"><span>Skin Booster</span></label>
-        <div class="fsearch"><input type="search" placeholder="Search products..." aria-label="Product search"></div>
       </div>
       <div class="pgrid rv">
         <a class="pcard" href="#/product-nml" data-sub="cosm" data-name="NML cosmetics Cosmetics">
@@ -550,8 +549,8 @@
           <h3>InfuSkin</h3>
           <div class="d">Skin Booster</div>
         </a>
-        <a class="pcard" href="#/product-geneskin" data-sub="booster" data-name="GeneSkin Skin Booster">
-          <div class="door-media"><span class="ph">GeneSkin image placeholder</span></div>
+        <a class="pcard" href="#/product-geneskin" data-sub="booster" data-name="GeneSkin GENESKIN Skin Booster">
+          <img class="photo" src="/company/assets/geneskin.jpg" alt="GeneSkin" loading="lazy">
           <h3>GeneSkin</h3>
           <div class="d">Skin Booster</div>
         </a>
@@ -576,9 +575,6 @@
         <a class="chip" href="#/products-beauty">Beauty</a>
         <a class="chip active" href="#/products-food">Health Functional Food</a>
         <a class="chip" href="#/products-device">Medical Device</a>
-      </div>
-      <div class="sub-filter rv" aria-label="Product search">
-        <div class="fsearch"><input type="search" placeholder="Search products..." aria-label="Product search"></div>
       </div>
       <div class="pgrid rv">
         <a class="pcard" href="#/product-s01" data-name="Soltice Multivitamin All-in-One"><img class="photo" src="/company/assets/soltice/s01.jpg" alt="Soltice Multivitamin All-in-One" loading="lazy"><h3>Soltice Multivitamin All-in-One</h3><div class="d">Health Functional Food</div></a>
@@ -721,19 +717,64 @@
   var PRODUCTS = {
     'nml':      { name: 'NML cosmetics', cat: 'Beauty → Cosmetics', backTo: '#/products-beauty', img: null, imgPh: 'NML cosmetics image placeholder', sub: PH, desc: PH, effect: PH, pack: PH, content: PH },
     'infuskin': { name: 'InfuSkin', cat: 'Beauty → Skin Booster', backTo: '#/products-beauty', img: null, imgPh: 'InfuSkin image placeholder', sub: PH, desc: PH, effect: PH, pack: PH, content: PH },
-    'geneskin': { name: 'GeneSkin', cat: 'Beauty → Skin Booster', backTo: '#/products-beauty', img: null, imgPh: 'GeneSkin image placeholder', sub: PH, desc: PH, effect: PH, pack: PH, content: PH },
-    'pillow':   { name: 'Cervical Pillow', cat: 'Medical Device', backTo: '#/products-device', img: null, imgPh: 'Cervical pillow image placeholder', sub: PH, desc: PH, effect: PH, pack: PH, content: PH }
+    'geneskin': { name: 'GeneSkin GENESKIN®', cat: 'Beauty → Skin Booster', backTo: '#/products-beauty', img: '/company/assets/geneskin.jpg',
+      sub: 'PN(Polynucleotide) + HA(Hyaluronic acid)',
+      desc: 'A wound dressing combining PN and HA, a Class II medical device used to protect areas where the skin barrier is damaged, such as dry skin.',
+      effect: 'Moisturizing and skin-barrier reinforcement · elasticity · soothing (ingredient properties of PN, HA, vitamin tree and chamomile extracts)',
+      pack: '1 Syringe / 1 Box · Shelf life: 24 months from manufacture',
+      content: 'PN, HA, chamomile extract, vitamin tree extract, etc. · License No. 22-5026' },
+    'pillow':   { name: 'Cervical Pillow', cat: 'Medical Device', backTo: '#/products-device', img: null, imgPh: 'Cervical pillow image placeholder', sub: PH, desc: PH, effect: PH, pack: PH, content: PH },
+    's01': { name: 'Soltice Multivitamin All-in-One', sub: '19 vitamins &amp; minerals',
+      desc: 'A multivitamin providing 19 vitamins and minerals in one daily tablet.',
+      effect: 'Contains 19 vitamins and minerals per daily serving', pack: '500 mg × 30 tablets (15 g)', content: '19 vitamins &amp; minerals' },
+    's02': { name: 'Soltice TamaFlex Joint & Cartilage Protection 5days', sub: 'Contains TamaFlex®',
+      desc: 'Formulated with TamaFlex®, a tamarind-turmeric extract complex that may support joint and cartilage health.',
+      effect: 'May help support joint and cartilage health', pack: '700 mg × 10 tablets (7 g)',
+      content: 'TamaFlex® complex · protocatechuic acid 0.11 mg, curcumin 12.025 mg per daily serving' },
+    's03': { name: 'Soltice Clear Omega-3', sub: 'Korea&#39;s first clear omega-3',
+      desc: 'Omega-3 in a clear, transparent capsule.',
+      effect: 'May help improve blood triglycerides and circulation', pack: '500 mg × 20 capsules (10 g)',
+      content: 'Oil containing EPA and DHA · EPA + DHA 600 mg per daily serving' },
+    's04': { name: 'Soltice Blood Sugar Protection Pro S2', sub: 'Oat fiber powder stick',
+      desc: 'Oat dietary fiber that may help moderate post-meal blood sugar, in a convenient powder stick.',
+      effect: 'May help moderate post-meal blood sugar rise', pack: '4 g × 20 sticks (80 g) · powder',
+      content: 'Oat dietary fiber · 6 g of fiber per daily serving' },
+    's05': { name: 'Soltice Cholesterol H/L', sub: 'Monacolin K · milk thistle · zinc',
+      desc: 'Red yeast rice, milk thistle extract and zinc in one capsule.',
+      effect: 'May help improve blood cholesterol and support liver health', pack: '500 mg × 30 capsules (15 g)',
+      content: 'Total monacolin K 4 mg, silymarin 130 mg per daily serving · zinc' },
+    's06': { name: 'Soltice Raffinose Bowel Protection', sub: 'Contains raffinose 3,000 mg',
+      desc: 'Raffinose for gut health in a powder stick.',
+      effect: 'May help beneficial gut flora and regular bowel movement', pack: '6 g × 10 sticks (60 g) · powder',
+      content: 'Contains raffinose 3,000 mg' },
+    's07': { name: 'Soltice Prostate Protection for Men', sub: 'Angelica gigas root extract complex (SHPro®)',
+      desc: 'Formulated with SHPro®, an Angelica gigas root extract complex for men&#39;s prostate health.',
+      effect: 'May help maintain prostate health', pack: '700 mg × 20 tablets (14 g)',
+      content: 'SHPro® complex · decursin 231 mg, ononin 0.084 mg per daily serving' },
+    's08': { name: 'Soltice Eye Protection Pro S4', sub: 'Astaxanthin 7 mg · beta-carotene',
+      desc: 'Astaxanthin from Haematococcus extract for eye health.',
+      effect: 'May help relieve eye fatigue', pack: '550 mg × 20 capsules (11 g)',
+      content: 'Haematococcus extract · astaxanthin 7 mg, beta-carotene 2 mg per daily serving' },
+    's09': { name: 'Soltice Liver Protection Pro S2', sub: 'Centella extract powder for liver health',
+      desc: 'Centella asiatica extract powder for liver health.',
+      effect: 'May help support liver health', pack: '900 mg × 20 tablets (18 g)',
+      content: 'Centella extract powder · asiaticoside 4.23 mg per daily serving' },
+    's10': { name: 'Soltice Bronchial Protection Rudicol', sub: 'Functional ingredient for bronchial health',
+      desc: 'Chrysanthemum indicum flower extract complex for bronchial health.',
+      effect: 'May help improve bronchial condition', pack: '850 mg × 14 tablets (11.9 g)',
+      content: 'Chrysanthemum extract complex · luteolin-7-glucoside 1.54 mg, dieckol 7.56 mg per daily serving' },
+    's11': { name: 'Soltice Vascular Clear Set', sub: 'Cholesterol H/L + Blood Sugar Protection Pro S2',
+      desc: 'Two products for vascular health care in one set.',
+      effect: 'May help improve blood cholesterol · moderate post-meal blood sugar',
+      pack: 'Set: Cholesterol H/L (500 mg × 30 capsules) + Blood Sugar Protection Pro S2 (4 g × 20 sticks)',
+      content: 'See each product page for details of the set items' }
   };
-  var SOLTICE = [
-    ['s01', 'Soltice Multivitamin All-in-One'], ['s02', 'Soltice TamaFlex Joint & Cartilage Protection 5days'],
-    ['s03', 'Soltice Clear Omega-3'], ['s04', 'Soltice Blood Sugar Protection Pro S2'],
-    ['s05', 'Soltice Cholesterol H/L'], ['s06', 'Soltice Raffinose Bowel Protection'],
-    ['s07', 'Soltice Prostate Protection for Men'], ['s08', 'Soltice Eye Protection Pro S4'],
-    ['s09', 'Soltice Liver Protection Pro S2'], ['s10', 'Soltice Bronchial Protection Rudicol'],
-    ['s11', 'Soltice Vascular Clear Set']
-  ];
-  SOLTICE.forEach(function (p) {
-    PRODUCTS[p[0]] = { name: p[1], cat: 'Health Functional Food → Soltice', backTo: '#/products-food', img: '/company/assets/soltice/' + p[0] + '.jpg', sub: PH, desc: PH, effect: PH, pack: PH, content: PH };
+  Object.keys(PRODUCTS).forEach(function (id) {
+    if (id.charAt(0) === 's' && id.length === 3) {
+      PRODUCTS[id].cat = 'Health Functional Food → Soltice';
+      PRODUCTS[id].backTo = '#/products-food';
+      PRODUCTS[id].img = '/company/assets/soltice/' + id + '.jpg';
+    }
   });
 
   function fillDetail(id) {
