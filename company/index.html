@@ -549,10 +549,15 @@
         <label class="fchk"><input type="checkbox" value="booster"><span>스킨부스터</span></label>
       </div>
       <div class="pgrid rv">
-        <a class="pcard" href="#/product-nml" data-sub="cosm" data-name="NML cosmetics 화장품">
-          <div class="door-media"><span class="ph">NML cosmetics 이미지 자리</span></div>
-          <h3>NML cosmetics</h3>
-          <div class="d">화장품</div>
+        <a class="pcard" href="#/product-nmlserum" data-sub="cosm" data-name="NOMORELIES 글루타치온 C15 래디언스 세럼 화장품 NML">
+          <img class="photo" src="/company/assets/nml_serum.jpg" alt="글루타치온-C15 래디언스 세럼" loading="lazy">
+          <h3>글루타치온-C15 래디언스 세럼</h3>
+          <div class="d">화장품 · NOMORELIES</div>
+        </a>
+        <a class="pcard" href="#/product-nmlcream" data-sub="cosm" data-name="NOMORELIES 스킨 배리어 인핸서 크림 화장품 NML">
+          <img class="photo" src="/company/assets/nml_cream.jpg" alt="스킨 배리어 인핸서 크림" loading="lazy">
+          <h3>스킨 배리어 인핸서 크림</h3>
+          <div class="d">화장품 · NOMORELIES</div>
         </a>
         <a class="pcard" href="#/product-infuskin" data-sub="booster" data-name="인퓨스킨 스킨부스터">
           <div class="door-media"><span class="ph">인퓨스킨 이미지 자리</span></div>
@@ -743,7 +748,18 @@
 
   var PH = '[문구 자리]';
   var PRODUCTS = {
-    'nml':      { name: 'NML cosmetics', cat: '미용 → 화장품', backTo: '#/products-beauty', img: null, imgPh: 'NML cosmetics 이미지 자리', sub: PH, desc: PH, effect: PH, pack: PH, content: PH },
+    'nmlserum': { name: '글루타치온-C15 래디언스 세럼', cat: '미용 → 화장품 · NOMORELIES', backTo: '#/products-beauty', img: '/company/assets/nml_serum.jpg',
+      sub: 'NOMORELIES — Advanced Antioxidant Serum',
+      desc: '고함량 글루타치온과 순수 비타민C를 담은 항산화 세럼입니다. 항산화·브라이트닝 효능이 임상으로 확인됐고, 국내 피부과 클리닉에서 사용·추천되는 제품입니다.',
+      effect: '항산화 · 칙칙한 피부톤 개선 (임상 확인) · 비건 인증',
+      pack: '20 mL / 0.67 fl. oz.',
+      content: '글루타치온 + 비타민C 복합 · 피부과 전문의 Dr. Taehan Koo 개발' },
+    'nmlcream': { name: '스킨 배리어 인핸서 크림', cat: '미용 → 화장품 · NOMORELIES', backTo: '#/products-beauty', img: '/company/assets/nml_cream.jpg',
+      sub: 'NOMORELIES — Clinically Proven Moisturizer',
+      desc: '피부 장벽 강화와 수분 보유력 개선이 임상으로 확인된 보습 크림입니다. O/W/O 멀티 에멀전 기술로 무겁지 않게 흡수됩니다.',
+      effect: '피부 장벽 회복 · 피부 수분량 증가 (임상 확인)',
+      pack: 'O/W/O 멀티 에멀전 · 나노 멀티레이어 기술',
+      content: '나이아신아마이드 · 세라마이드 · 히알루론산' },
     'infuskin': { name: '인퓨스킨', cat: '미용 → 스킨부스터', backTo: '#/products-beauty', img: null, imgPh: '인퓨스킨 이미지 자리', sub: PH, desc: PH, effect: PH, pack: PH, content: PH },
     'geneskin': { name: '제네스킨 GENESKIN®', cat: '미용 → 스킨부스터', backTo: '#/products-beauty', img: '/company/assets/geneskin.jpg',
       sub: 'PN(Polynucleotide) + HA(Hyaluronic acid)',

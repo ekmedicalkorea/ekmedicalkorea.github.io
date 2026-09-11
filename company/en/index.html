@@ -549,10 +549,15 @@
         <label class="fchk"><input type="checkbox" value="booster"><span>Skin Booster</span></label>
       </div>
       <div class="pgrid rv">
-        <a class="pcard" href="#/product-nml" data-sub="cosm" data-name="NML cosmetics Cosmetics">
-          <div class="door-media"><span class="ph">NML cosmetics image placeholder</span></div>
-          <h3>NML cosmetics</h3>
-          <div class="d">Cosmetics</div>
+        <a class="pcard" href="#/product-nmlserum" data-sub="cosm" data-name="NOMORELIES Glutathione C15 Radiance Serum Cosmetics NML">
+          <img class="photo" src="/company/assets/nml_serum.jpg" alt="Glutathione-C15 Radiance Serum" loading="lazy">
+          <h3>Glutathione-C15 Radiance Serum</h3>
+          <div class="d">Cosmetics · NOMORELIES</div>
+        </a>
+        <a class="pcard" href="#/product-nmlcream" data-sub="cosm" data-name="NOMORELIES Skin Barrier Enhancer Cream Cosmetics NML">
+          <img class="photo" src="/company/assets/nml_cream.jpg" alt="Skin Barrier Enhancer Cream" loading="lazy">
+          <h3>Skin Barrier Enhancer Cream</h3>
+          <div class="d">Cosmetics · NOMORELIES</div>
         </a>
         <a class="pcard" href="#/product-infuskin" data-sub="booster" data-name="InfuSkin Skin Booster">
           <div class="door-media"><span class="ph">InfuSkin image placeholder</span></div>
@@ -743,7 +748,18 @@
 
   var PH = '[Copy placeholder]';
   var PRODUCTS = {
-    'nml':      { name: 'NML cosmetics', cat: 'Beauty → Cosmetics', backTo: '#/products-beauty', img: null, imgPh: 'NML cosmetics image placeholder', sub: PH, desc: PH, effect: PH, pack: PH, content: PH },
+    'nmlserum': { name: 'Glutathione-C15 Radiance Serum', cat: 'Beauty → Cosmetics · NOMORELIES', backTo: '#/products-beauty', img: '/company/assets/nml_serum.jpg',
+      sub: 'NOMORELIES — Advanced Antioxidant Serum',
+      desc: 'An antioxidant serum with high-potency glutathione and pure vitamin C. Clinically proven antioxidant and brightening efficacy, used and recommended in Korean dermatology clinics.',
+      effect: 'Antioxidant · revives dull skin tone (clinically proven) · vegan certified',
+      pack: '20 mL / 0.67 fl. oz.',
+      content: 'Glutathione + vitamin C complex · developed by dermatologist Dr. Taehan Koo' },
+    'nmlcream': { name: 'Skin Barrier Enhancer Cream', cat: 'Beauty → Cosmetics · NOMORELIES', backTo: '#/products-beauty', img: '/company/assets/nml_cream.jpg',
+      sub: 'NOMORELIES — Clinically Proven Moisturizer',
+      desc: 'A moisturizer clinically proven to repair the skin barrier and boost moisture levels. O/W/O multi-emulsion technology absorbs without heaviness.',
+      effect: 'Repairs skin barrier · boosts skin moisture (clinically proven)',
+      pack: 'O/W/O multi-emulsion · nano multi-layer technology',
+      content: 'Niacinamide · ceramide · hyaluronic acid' },
     'infuskin': { name: 'InfuSkin', cat: 'Beauty → Skin Booster', backTo: '#/products-beauty', img: null, imgPh: 'InfuSkin image placeholder', sub: PH, desc: PH, effect: PH, pack: PH, content: PH },
     'geneskin': { name: 'GeneSkin GENESKIN®', cat: 'Beauty → Skin Booster', backTo: '#/products-beauty', img: '/company/assets/geneskin.jpg',
       sub: 'PN(Polynucleotide) + HA(Hyaluronic acid)',
