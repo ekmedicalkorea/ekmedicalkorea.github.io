@@ -1005,7 +1005,7 @@
     if (!f.name.value.trim() && !f.company.value.trim()) { fail.hidden = false; return; }
     btn.disabled = true; btn.style.opacity = '.5';
     try {
-      var res = await fetch('https://zhjgsryutquaejflvaqq.supabase.co/rest/v1/inquiries', {
+      var res = await fetch('https://zhjgsryutquaejflvaqq.supabase.co/rest/v1/company_inquiries', {
         method: 'POST',
         headers: {
           'apikey': 'sb_publishable_kpj2mpufyZQjBvHkr2i7Ng_3rSRZtG1',
@@ -1014,11 +1014,11 @@
           'Prefer': 'return=minimal'
         },
         body: JSON.stringify([{
+          company: f.company.value,
           name: f.name.value,
-          hospital: '[Company] ' + f.company.value,
           phone: f.tel.value,
           email: f.email.value || null,
-          content: '[Corporate website inquiry]\n' + f.message.value
+          message: f.message.value
         }])
       });
       if (!res.ok) throw new Error('insert failed ' + res.status);
