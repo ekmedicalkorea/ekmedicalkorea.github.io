@@ -8,7 +8,10 @@
 <meta property="og:type" content="website" />
 <meta property="og:title" content="이케이메디칼 | Beauty &amp; Health" />
 <title>이케이메디칼 | Beauty & Health</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap"></noscript>
 <style>
   :root {
     --paper: #F8F5EF;
@@ -998,6 +1001,10 @@
     ok.hidden = true; fail.hidden = true;
     if (!f.name.value.trim() && !f.company.value.trim()) { fail.hidden = false; return; }
     btn.disabled = true; btn.style.opacity = '.5';
+    var iid = (self.crypto && crypto.randomUUID) ? crypto.randomUUID()
+      : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+          var r = Math.random() * 16 | 0; return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+        });
     try {
       var res = await fetch('https://zhjgsryutquaejflvaqq.supabase.co/rest/v1/company_inquiries', {
         method: 'POST',
@@ -1008,6 +1015,7 @@
           'Prefer': 'return=minimal'
         },
         body: JSON.stringify([{
+          id: iid,
           company: f.company.value,
           name: f.name.value,
           phone: f.tel.value,
@@ -1018,6 +1026,16 @@
       if (!res.ok) throw new Error('insert failed ' + res.status);
       ok.hidden = false;
       f.reset();
+      // 담당자 알림 메일. 실패해도 접수는 이미 끝났으므로 무시한다.
+      fetch('https://zhjgsryutquaejflvaqq.supabase.co/functions/v1/notify-company-inquiry', {
+        method: 'POST',
+        headers: {
+          'apikey': 'sb_publishable_kpj2mpufyZQjBvHkr2i7Ng_3rSRZtG1',
+          'Authorization': 'Bearer sb_publishable_kpj2mpufyZQjBvHkr2i7Ng_3rSRZtG1',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ inquiry_id: iid })
+      }).catch(function () {});
     } catch (err) {
       fail.hidden = false;
     }
